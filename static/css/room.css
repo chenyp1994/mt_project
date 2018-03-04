@@ -1,0 +1,97 @@
+#menu_div {
+  width: 100%;
+  height: 100%;
+  /*display: -webkit-box;*/
+  /*-webkit-box-orient: vertical;*/
+}
+
+.topbar {
+  width: 100%;
+  height: 3.125em;
+  color: #fff;
+  font-size: 0.625em;
+  background: #353E4C;
+  /*flex-grow: 1;*/
+  display: flex;
+  align-items: center;
+}
+
+.titlebar {
+  width: 100%;
+  height: 3.125em;
+  /*flex-grow: 1;*/
+  color: #fff;
+  background: #353E4C;
+  font-size: 1.25em;
+  display: flex;
+  align-items: center;
+}
+
+.maindiv {
+  width: 100%;
+  display: -webkit-box;
+  -webkit-box-flex: 1;
+  flex: 1;
+  -webkit-box-orient: horizontal
+  /*height: 100%;*/
+}
+
+.navdiv {
+  flex: 1;
+  /*height: 100%;*/
+}
+
+.navdiv ul {
+  list-style: none;
+  width: 100%;
+  height: 100%;
+  /*width: 20%;*/
+  float: left;
+  padding: 0.3125em 0px;
+  background: #f4f4f4;
+}
+
+.active {
+  background: #ffffff;
+}
+
+.foodNormsDiv {
+  display: none;
+}
+
+.dis_foodNormsDiv {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, .3);
+  position: absolute;
+  z-index: 999;
+  top: 0;
+  left: 0;
+}
+
+.food_center {
+  width: 80%;
+  height: 50%;
+  margin: 50% auto;
+  background: white;
+  border-radius: 0.3125px;
+}
+
+.shop_carts {
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  left: 0;
+  bottom: 0;
+  position: absolute;
+}
+
+.car_price_div {
+  background: #353E4C;
+  color: #fff;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+}

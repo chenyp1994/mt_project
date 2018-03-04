@@ -1,0 +1,67 @@
+{
+  "lists": [
+    {
+      "title": "大堂",
+      "img_url": "src/assets/hall.png",
+      "index": 0,
+      "rooms": [
+        {
+          "index": "0",
+          "statusText": "123",
+          "status": "1",
+          "text": "1号桌"
+        },
+        {
+          "index": "1",
+          "statusText": "456",
+          "status": "1",
+          "text": "2号桌"
+        },
+        {
+          "index": "2",
+          "statusText": "456",
+          "status": "1",
+          "text": "3号桌"
+        }
+      ]
+    },
+    {
+      "title": "房间",
+      "index": 1,
+      "rooms": [
+        {
+          "index": 0,
+          "statusText": "345",
+          "status": "1",
+          "text": "3号桌"
+        },
+        {
+          "index": 1,
+          "statusText": 789,
+          "status": "1",
+          "text": "4号桌"
+        }
+      ]
+    }
+  ],
+  "goods":[
+    {
+      "name":"新品尝鲜",
+      "foods":[
+        {
+          "text":"小米金瓜粥",
+          "price":"5.00"
+        }
+      ]
+    },
+    {
+      "name":"超级套餐",
+      "foods":[
+        {
+          "text":"红烧肉套餐",
+          "price":"15.00"
+        }
+      ]
+    }
+  ]
+}
