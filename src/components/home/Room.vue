@@ -24,11 +24,12 @@
       <div class="food_div">
         <ul class="foods_list">
           <li v-for="(item, index) in goods">{{item.name}}
-            <ul>
+            <ul class="foodInfo_list">
               <li v-for="(room, index) in item.foods">
-                <div>{{room.text}}</div>
-                <div>
-                  <p>&yen;{{room.price}}<span v-on:click="onChooseNorms($event)" class="choose_norm_span">选规格</span></p>
+                <div class="foodImg_div"></div>
+                <div class="food_other_div"><p>{{room.text}}</p>
+                  <p class="price_p">&yen;{{room.price}}
+                    <span v-on:click="onChooseNorms(room,$event)" class="choose_norm_span">选规格</span></p>
                 </div>
               </li>
             </ul>
@@ -47,14 +48,24 @@
     </div>
     <div id="food_norms" class="foodNormsDiv">
       <div class="food_center">
-        <div>{{food_info.text}}</div>
-        <div><p>规格</p>
-          <div><span>小份</span><span>中份</span><span>大份</span></div>
+        <div class="foodname_div">
+          <p>{{food_info.text}}<span @mouseover="onCloseRoom()">
+          <img src="../../assets/close_icon.png"></span></p>
         </div>
-        <div><p>辣度</p>
-          <div><span>微辣</span><span>中辣</span><span>特辣</span></div>
+        <div class="food_center_normInfo">
+          <p class="norms_la">规格</p>
+          <p><span class="norm_span">小份</span><span class="norm_span">中份</span><span class="norm_span">大份</span></p>
         </div>
-        <div><span>&yen;39.90</span><span>&yen;88</span><span>（微辣）</span><span>加入购物车</span></div>
+        <div class="food_center_normInfo">
+          <p>辣度</p>
+         <p class="norms_la"><span class="norm_span">微辣</span><span class="norm_span">中辣</span><span class="norm_span">特辣</span></p>
+        </div>
+        <div class="food_center_price">
+          <span>&yen;39.90</span>
+          <span>&yen;88</span><span>（微辣）</span>
+          <span class="food_center_shopcart_span">
+            <img src="../../assets/shopcart_s.png"/>加入购物车</span>
+        </div>
       </div>
     </div>
     <div class="shop_carts">
@@ -111,8 +122,10 @@
         this.num = index;
         console.log("我点击了" + index);
       },
-      onChooseNorms: function (event) {
-        console.log(event.currentTarget);
+      onChooseNorms: function (food, event) {
+        document.getElementById("food_norms").setAttribute("class", "dis_foodNormsDiv");
+        this.food_info = food;
+        console.log(food);
       },
       onRoomOpen: function (room_info) {
         this.openRoom = room_info
