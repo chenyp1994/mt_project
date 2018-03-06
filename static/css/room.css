@@ -6,7 +6,7 @@
   flex-direction: column;
 }
 
-.topbar {
+.topbar_room {
   width: 100%;
   height: 3.125em;
   color: #fff;
@@ -17,7 +17,7 @@
   align-items: center;
 }
 
-.titlebar {
+.titlebar_room {
   width: 100%;
   height: 3.125em;
   /*flex-grow: 1;*/
@@ -30,9 +30,10 @@
 
 .maindiv {
   width: 100%;
-  /*background: #f4f4f4;*/
-  flex-grow: 1;
-  padding-bottom: 3.25em;
+  height: 80%;
+  display: -webkit-flex; /* Safari */
+  display: flex;
+  background: #f4f4f4;
 }
 
 .navdiv {
@@ -42,14 +43,35 @@
   font-size: 0.75em;
 }
 
-.food_div {
-  display: block;
+.mainmenu_div{
   width: 75%;
+  flex-grow: 1;
+  float: left;
+  background: #ffffff;
+  padding: 0.3125em 0em 5% 0.3125em ;
+  overflow: scroll;
+}
+
+.food_div {
+  width: 100%;
   float: left;
   background: rgb(244, 248, 249);
   /*flex: 2;*/
-  height: 100%;
+  /*height: 100%;*/
 }
+.menuimg_div{
+  width: 25%;
+  height:3em ;
+  background: #000;
+  float: left;
+}
+
+.food_item_div{
+  width: 75%;
+  float: left;
+}
+
+
 
 .category_list {
   list-style: none;
@@ -72,8 +94,8 @@
 }
 
 .foodInfo_list li {
-  width: 100%;
-  height: inherit;
+  /*width: 100%;*/
+  /*height: inherit;*/
   border-bottom: 1px solid #E3E9EB;
 }
 
@@ -125,6 +147,9 @@
   top: 0;
   left: 0;
 }
+.nodis_foodNormsDiv{
+  display: none;
+}
 
 .food_center {
   width: 80%;
@@ -164,16 +189,46 @@
   margin: 0em;
 }
 
+.food_center_normInfo span{
+  margin-right: 1em;
+}
+
 .food_center_price {
+  margin:1em 0em;
   background:  #F4F8F9;
   border-radius: 0em 0em 0.25em 0.25em;
+  padding: 1em 0.825em;
+}
+
+.trueprice_span{
+  color:#FB4E44;
+}
+
+.ladu_span{
+  font-size: 0.625em;
+}
+
+.oriprice_span{
+  font-size: 0.625em;
+  color:#91A4AD;
+  text-decoration: line-through;
 }
 
 .food_center_shopcart_span{
   font-size: 0.75em;
+  height: 2.5em;
+  margin-top: -0.625em;
   background: #e67500;
   color: #ffffff;
-  padding: 0.5em;
+  padding: 0em 0.625em;
+  float:right;
+  display: flex;
+  align-items: center;
+  border-radius: 1.25em;
+}
+
+.food_center_shopcart_span img{
+  margin-right: 0.3125em;
 }
 
 /*购物车样式*/

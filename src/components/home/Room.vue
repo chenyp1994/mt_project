@@ -1,10 +1,10 @@
 <template>
   <div class="container" id="menu_div">
-    <div class="topbar">
+    <div class="topbar_room">
       <img src="../../assets/goback.png"/>
       <p>{{tableName}}</p>
     </div>
-    <div class="titlebar">
+    <div class="titlebar_room">
       <img src=""/>
       <p>{{shopname}}</p>
     </div>
@@ -21,21 +21,15 @@
           <!--</li>-->
         </ul>
       </div>
-      <div class="food_div">
-        <ul class="foods_list">
-          <li v-for="(item, index) in goods">{{item.name}}
-            <ul class="foodInfo_list">
-              <li v-for="(room, index) in item.foods">
-                <div class="foodImg_div"></div>
-                <div class="food_other_div"><p>{{room.text}}</p>
-                  <p class="price_p">&yen;{{room.price}}
-                    <span v-on:click="onChooseNorms(room,$event)" class="choose_norm_span">选规格</span></p>
-                </div>
-              </li>
-            </ul>
-          </li>
-        </ul>
+      <div class="mainmenu_div">
+        <div class="food_div" v-for="(item, index) in menus">
+          <div class="menuimg_div"></div>
+          <div class=food_item_div>{{item.name}}
+            <p>&yen;{{item.cost}}<span @click="onChooseNorms(item,$event)">选规格</span></p>
+          </div>
+        </div>
       </div>
+
       <!--<div v-for="(room, index) in goods.foods" v-show="index == num" @mouseover="onRoomOpen(room)">-->
       <!--<div class="roomdiv">-->
       <!--<p>-->
@@ -58,11 +52,12 @@
         </div>
         <div class="food_center_normInfo">
           <p>辣度</p>
-         <p class="norms_la"><span class="norm_span">微辣</span><span class="norm_span">中辣</span><span class="norm_span">特辣</span></p>
+          <p class="norms_la"><span class="norm_span">微辣</span><span class="norm_span">中辣</span><span class="norm_span">特辣</span>
+          </p>
         </div>
         <div class="food_center_price">
-          <span>&yen;39.90</span>
-          <span>&yen;88</span><span>（微辣）</span>
+          <span class="trueprice_span">&yen;39.90</span>
+          <span class="oriprice_span">&yen;88</span><span class="ladu_span">（微辣）</span>
           <span class="food_center_shopcart_span">
             <img src="../../assets/shopcart_s.png"/>加入购物车</span>
         </div>
@@ -86,10 +81,10 @@
       return {
         lists: [],
         num: 1,
-        merchanData: [],
         shopname: null,
         tableName: null,
         goods: [],
+        menus: [],
         openRoom: [],
         food_info: []
       }
@@ -100,20 +95,22 @@
         'mer': '1',
         'sho': '66'
       };
-      axios.get('../../../static/respons.json').then((res) => {
-        axios.get('../../static/data.json').then((res) => {
-          this.goods = res.data.goods;
-        });
+//      axios.get('../../../static/respons.json').then((res) => {
+//        axios.get('../../static/data.json').then((res) => {
+//          this.goods = res.data.goods;
+//        });
 //        console.log(res);
 //        this.merchanData = res.data;
 //        this.shopname = res.data.shopname;
 //        this.lists = res.data.table;
 //        this.rooms = res.data.table[1].shopTableList;
-      });
+//      });
       var _this = this;
       eventBus.$on("AttrDeliver", function (val) {
         _this.tableName = val.tableName;
         _this.shopname = val.data.shopname;
+        _this.goods = val.data.goods;
+        _this.menus = val.data.goods[0].foods;
 //      this.rooms=lists[0].rooms
       });
     },
@@ -127,20 +124,8 @@
         this.food_info = food;
         console.log(food);
       },
-      onRoomOpen: function (room_info) {
-        this.openRoom = room_info
-        document.getElementById("roomopendiv").setAttribute("class", "display_room");
-      },
       onCloseRoom: function () {
-        document.getElementById("roomopendiv").setAttribute("class", "no_display_room")
-      },
-      onOpenDesk: function (event) {
-        this.$router.push(
-          '/room', 'Room'
-        );
-        document.getElementById("roomopendiv").setAttribute("class", "no_display_room");
-//        var menu_div = document.getElementById("menu_div");
-//        menu_div.setAttribute("class", "display_menu")
+        document.getElementById("food_norms").setAttribute("class", "nodis_foodNormsDiv")
       }
     }
   }
