@@ -115,7 +115,7 @@
     methods: {
       toggle: function (index) {
         this.num = index;
-        this.rooms = this.lists[index].shopTableList
+        this.rooms = this.lists[index].shopTableList;
       },
       onRoomOpen: function (room_info) {
         this.openRoom = room_info

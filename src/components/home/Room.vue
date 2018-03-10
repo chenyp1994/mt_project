@@ -11,7 +11,7 @@
     <div class="maindiv">
       <div class="navdiv">
         <ul class="category_list">
-          <li v-for="(item, index) in goods" v-bind:class="{active:index == num}" @mouseover="toggleRoom(index)">
+          <li v-for="(item, index) in goods" v-bind:class="{active:index == num}" @mouseover="toggleRoom(item,index)">
             <!--<img :src="item.img_url">-->
             {{item.name}}
           </li>
@@ -24,8 +24,15 @@
       <div class="mainmenu_div">
         <div class="food_div" v-for="(item, index) in menus">
           <div class="menuimg_div"></div>
-          <div class=food_item_div>{{item.name}}
-            <p>&yen;{{item.cost}}<span @click="onChooseNorms(item,$event)">选规格</span></p>
+          <div class=food_item_div><span class="food_name_span">{{item.name}}</span>
+            <p class="money_p">&yen;&nbsp;{{item.cost}}
+              <span @click="onChooseNorms(item,$event)" class="norms_span" v-if="foodNums==0">选规格</span>
+              <span v-else="" class="food_nums_count_span">
+                <span @click="onReduceFoodItem()"><img src="../../assets/minus.png"/></span>
+                {{foodNums}}
+                <span @click="onAddFoodItem(item)"><img src="../../assets/plus.png"/></span>
+              </span>
+            </p>
           </div>
         </div>
       </div>
@@ -43,7 +50,7 @@
     <div id="food_norms" class="foodNormsDiv">
       <div class="food_center">
         <div class="foodname_div">
-          <p>{{food_info.text}}<span @mouseover="onCloseRoom()">
+          <p>{{food_info.name}}<span @mouseover="onCloseRoom()">
           <img src="../../assets/close_icon.png"></span></p>
         </div>
         <div class="food_center_normInfo">
@@ -56,19 +63,34 @@
           </p>
         </div>
         <div class="food_center_price">
-          <span class="trueprice_span">&yen;39.90</span>
-          <span class="oriprice_span">&yen;88</span><span class="ladu_span">（微辣）</span>
-          <span class="food_center_shopcart_span">
+          <span class="trueprice_span">&yen;{{food_info.cost}}</span>
+          <span class="oriprice_span">&yen;{{food_info.retailPrice}}</span><span class="ladu_span">（微辣）</span>
+          <span class="food_center_shopcart_span" @click="onAddFood(food_info)">
             <img src="../../assets/shopcart_s.png"/>加入购物车</span>
         </div>
       </div>
     </div>
-    <div class="shop_carts">
-      <div></div>
-      <div class="car_price_div"><span class="shop_cartIcon"><span><img
-        src="../../assets/shopcart.png"></span></span>
-        <p class="price_span">&yen;76.50</p><span class="pay_span">去下单</span></div>
-      <div></div>
+    <div class="shop_carts autoheight" id="shop_carts">
+      <div id="shopItem" class="no_display_shop" @click="onDisplayShop(isShop,$event)">
+        <div class="shopItemDetail">
+          <p><span class="shop_name_span">购物车</span><span class="clear_span"><img
+            src="../../assets/clear.png"/>清空</span></p>
+          <ul>
+            <li>
+              小米金瓜粥<span></span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="car_price_div">
+        <span class="shop_cartIcon" @click="onDisplayShop(isShop)">
+          <span :class="'food_'+foodNums">
+          {{foodNums}}
+        </span>
+        <span><img
+          src="../../assets/shopcart.png"></span></span>
+        <p class="price_span" @click="onDisplayShop(isShop)">&yen;76.50</p>
+        <span class="pay_span" @click="onRedirectToPay()">去下单</span></div>
     </div>
   </div>
 </template>
@@ -86,7 +108,11 @@
         goods: [],
         menus: [],
         openRoom: [],
-        food_info: []
+        food_info: [],
+        foodNums: 0,
+        isShop: true,
+        shop_menu: [],
+        menuItem:[]
       }
     },
 
@@ -106,6 +132,7 @@
 //        this.rooms = res.data.table[1].shopTableList;
 //      });
       var _this = this;
+      _this.menuItem.num = 0;
       eventBus.$on("AttrDeliver", function (val) {
         _this.tableName = val.tableName;
         _this.shopname = val.data.shopname;
@@ -114,18 +141,62 @@
 //      this.rooms=lists[0].rooms
       });
     },
+
+    beforeDestroy (){
+      eventBus.$emit("PayAttrDeliver", {tableName: this.tableName, shopName: this.shopname});
+    },
     methods: {
-      toggleRoom: function (index) {
+      toggleRoom: function (foods, index) {
+//        var _this = this;
         this.num = index;
-        console.log("我点击了" + index);
+        this.menus = foods.foods;
+        console.log(this.menus);
       },
       onChooseNorms: function (food, event) {
         document.getElementById("food_norms").setAttribute("class", "dis_foodNormsDiv");
         this.food_info = food;
-        console.log(food);
+//        console.log(food);
       },
       onCloseRoom: function () {
-        document.getElementById("food_norms").setAttribute("class", "nodis_foodNormsDiv")
+        document.getElementById("food_norms").setAttribute("class", "nodis_foodNormsDiv");
+      },
+
+      //规格窗口里的加入购物车的方法
+      onAddFood: function (menu) {
+        this.foodNums++;
+        this.menuItem.num++;
+        this.shop_menu.push(shop_menu);
+        console.log(this.foodNums);
+        document.getElementById("food_norms").setAttribute("class", "nodis_foodNormsDiv");
+      },
+      //点击选规格按钮后的加号按钮方法
+      onAddFoodItem: function (fooditem) {
+        this.foodNums++;
+        if (fooditem.nums == undefined) {
+          fooditem.nums = 1;
+        } else {
+          fooditem.nums++;
+        }
+        this.shop_menu.push(fooditem);
+        console.log(fooditem)
+      },
+
+      onReduceFoodItem: function () {
+        this.foodNums--;
+      },
+
+      onDisplayShop: function (isShop) {
+        var shopcls = isShop ? "display_shop" : "no_display_shop";
+        var height = isShop ? "fullheight" : "autoheight";
+        document.getElementById("shopItem").setAttribute("class", shopcls);
+        document.getElementById("shop_carts").setAttribute("class", height);
+        this.isShop = !isShop;
+      },
+
+      onRedirectToPay: function () {
+        this.$router.push(
+          '/pay', 'Pay'
+        );
       }
     }
   }
