@@ -181,7 +181,9 @@
 }
 
 .dis_foodNormsDiv {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, .3);
@@ -197,7 +199,6 @@
 
 .food_center {
   width: 80%;
-  margin: 50% auto;
   background: white;
   border-radius: 0.25em;
 }
@@ -217,22 +218,66 @@
   width: auto;
 }
 
-.norm_span {
+.norm_span, .norm_la {
   display: inline-block;
   padding: 0.25em 0.75em;
   float: left;
+  margin-right: 0.625em;
   border: 1px solid #C6CDD4;
   border-radius: 0.25em;
 }
 
-.food_center_normInfo {
+.norm_span:hover, .norm_la:hover {
+  border-color: #e67500;
+}
+
+.ladu_label input[type="checkbox"] {
+  -webkit-appearance: none;
+  display: inline-block;
+  position: absolute;
+  border: 1px solid #94A4AE;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  margin: 0em;
+  border-radius: 3px;
+}
+
+.taste_select_span{
+  background: #e67500;
+  display: inline-block;
+  color: #ffffff;
+  padding: 0.3125em;
+  margin: 0.625em;
+  border-radius: 3px;
+}
+.ladu_label input[type="checkbox"]:checked{
+  border-color: #e67500;
+}
+
+.food_center_normInfo, .food_center_laduInfo {
   display: inline-block;
   width: 100%;
 }
 
-.food_center_normInfo p {
+.food_center_normInfo ul, .food_center_laduInfo ul {
+  display: inline-block;
+  width: inherit;
+  padding: 0em 0.725em;
+  margin: 0em;
+}
+
+.food_center_normInfo p, .food_center_laduInfo p {
   padding: 0.625em;
   margin: 0em;
+}
+
+.food_center_laduInfo input{
+  display: inline-block;
+  width: inherit;
+  padding: 0.3125em 0em;
+  margin:0.3125em -1em;
 }
 
 .food_center_normInfo span {
@@ -240,7 +285,7 @@
 }
 
 .food_center_price {
-  margin: 1em 0em;
+  margin: 1em 0em 0em;
   background: #F4F8F9;
   border-radius: 0em 0em 0.25em 0.25em;
   padding: 1em 0.825em;
@@ -290,6 +335,7 @@
   flex-direction: column;
 }
 
+
 .fullheight {
   height: 100%;
   width: 100%;
@@ -303,7 +349,7 @@
   flex-direction: column;
 }
 
-.autoheight{
+.autoheight {
   height: auto;
 }
 
@@ -345,7 +391,7 @@
   border-radius: 50%;
 }
 
-.shop_cartIcon .food_1, .shop_cartIcon .food_2, .shop_cartIcon .food_3, .shop_cartIcon .food_4, .shop_cartIcon .food_5.shop_cartIcon .food_6 {
+.shop_cartIcon .food_1, .shop_cartIcon .food_2, .shop_cartIcon .food_3, .shop_cartIcon .food_4, .shop_cartIcon .food_5, .shop_cartIcon .food_6 {
   font-size: 0.75em;
   display: block;
   position: absolute;
@@ -428,6 +474,68 @@
 
 .clear_span img {
   margin-right: 0.3125em;
+}
+
+/*弹出的口味选择div样式*/
+.taste_div {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1001;
+  background: rgba(0, 0, 0, .3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.taste_center_div {
+  width: 80%;
+  background: #ffffff;
+}
+
+.taste_title_p {
+  text-align: center;
+  margin: 0em;
+  padding: 0.625em;
+}
+
+.taste_item_div{
+  width: 100%;
+  height: inherit;
+  overflow: scroll;
+}
+
+.taste_title_p span {
+  display: block;
+  float: right;
+  width: auto;
+}
+
+.ladu_label {
+  padding: 0.625em;
+  margin: 0.625em;
+  display: inline-block;
+  position: relative;
+  text-align: center;
+}
+
+.taste_btn_div {
+  width: 100%;
+  text-align: center;
+  background: #F4F8F9;
+  padding: 0.625em 0em;
+}
+
+.taste_btn_div span {
+  width: auto;
+  background: #e67500;
+  display: inline-block;
+  color: #ffffff;
+  border: 1px solid #e67500;
+  padding: 0.25em 0.825em;
+  border-radius: 3px;
 }
 
 

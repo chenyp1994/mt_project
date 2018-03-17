@@ -21,7 +21,7 @@
       var _this = this;
       eventBus.$on("PayAttrDeliver", function (val) {
         _this.tableName = val.tableName;
-        _this.shopname = val.data.shopname;
+        _this.shopName = val.data.shopname;
       });
     }
   }
