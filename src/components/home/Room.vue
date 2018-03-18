@@ -5,8 +5,8 @@
       <p>{{tableName}}</p>
     </div>
     <div class="titlebar_room">
-      <img src=""/>
-      <p>{{shopname}}</p>
+      <span><img src=""/></span>
+      <p>{{shopName}}</p>
     </div>
     <div class="maindiv">
       <div class="navdiv">
@@ -87,13 +87,13 @@
     <div class="shop_carts autoheight" id="shop_carts">
       <div id="shopItem" class="no_display_shop" @click="onDisplayShop(isShop,$event)">
         <div class="shopItemDetail">
-          <p><span class="shop_name_span">购物车</span><span class="clear_span"><img
+          <p><span class="shop_name_span">购物车</span><span class="clear_span" @click="onClearShop()"><img
             src="../../assets/clear.png"/>清空</span></p>
           <ul>
             <li v-for="item in menuItem">
-              {{item.name}}
-              <span>&yen;{{item.cost}}</span>
-              <span class="food_nums_count_span">
+              <span class="shopcart_name_span">{{item.name}}</span>
+              <span class="shopcart_money_span">&yen;{{item.cost}}</span>
+              <span class="shopcart_count_span">
                 <span @click="onReduceFoodItem(item)"><img src="../../assets/minus.png"/></span>
                 {{item.num}}
                 <span @click="onAddFoodItem(item)"><img src="../../assets/plus.png"/></span>
@@ -137,16 +137,15 @@
       return {
         lists: [],
         num: 1,
-        shopname: null,
+        shopName: null,
         tableName: null,
         goods: [],
-        menus: [],
+        menus: [],//菜单的总列表
         openRoom: [],
-        food_info: [],
-        foodNums: 0,
+        food_info: [],//点击菜单弹出窗口信息
+        foodNums: 0,//购物车的总数
         isShop: true,
-        shop_menu: [],
-        menuItem: new Array(),
+        menuItem: new Array(),//购物车里的菜单
         isShowNorm: false,
         tasteEntity: [],
         selectedTaste: []
@@ -171,7 +170,7 @@
       var _this = this;
       eventBus.$on("AttrDeliver", function (val) {
         _this.tableName = val.tableName;
-        _this.shopname = val.data.shopname;
+        _this.shopName = val.data.shopname;
         _this.goods = val.data.goods;
         _this.menus = val.data.goods[0].foods;
         for (var m = 0; m < _this.goods.length; m++) {
@@ -183,8 +182,18 @@
     },
 
     beforeDestroy (){
-      eventBus.$emit("PayAttrDeliver", {tableName: this.tableName, shopName: this.shopname, menus: this.menuItem});
+      var _this = this;
+      var shopInfo = new Object();
+      shopInfo.shopName = _this.shopName;
+      shopInfo.tableName = _this.tableName;
+      alert(_this.shopName);
+      eventBus.$emit("PayAttrDeliver", {tableName: this.tableName, shopName: this.shopName, data: this.menuItem});
     },
+
+//    destroyed(){
+//      eventBus.$emit("PayAttrDeliver", {tableName:this.tableName,shopName:this.shopName,data: this.menuItem});
+////      eventBus.$off("PayAttrDeliver");
+//    },
     methods: {
       toggleRoom: function (foods, index) {
 //        var _this = this;
@@ -209,7 +218,6 @@
         this.foodNums++;
         food_info.num++;
         var menuitem;
-//        this.shop_menu.push(shop_menu);
         menuitem = JSON.parse(JSON.stringify(food_info));
         this.menuItem.push(menuitem);
         console.log(this.menuItem);
@@ -238,17 +246,26 @@
       },
 
       onReduceFoodItem: function (food_info) {
-        food_info.num--;
-        this.menuItem = JSON.parse(JSON.stringify(food_info));
-        this.menuItem.num = this.foodNums;
-        var isSameID = this.menus.findIndex(x => x.id == food_info.id);
-        if (isSameID !== -1) {
-          this.foodNums--;
-          this.menus[isSameID].num--;
+        console.log(this.menus);
+        if (food_info.num == 0) {
+          return;
+        } else {
+          var isSameID = this.menus.findIndex(x => x.id == food_info.id);
+          var shopItemId = this.menuItem.findIndex(x => x.id == food_info.id);
+          if (isSameID != -1) {
+            this.foodNums--;
+            this.menus[isSameID].num--;
+            if (this.menuItem[shopItemId].num == 0) {
+              this.menuItem.splice(shopItemId, 1);
+            } else {
+              return;
+            }
+          }
+          else {
+            return;
+          }
         }
-        else {
-          return
-        }
+
         console.log(this.menuItem);
       },
 
@@ -264,6 +281,12 @@
         this.tasteEntity = food_info.foodtasetEntity;
         this.isShowNorm = true;
         console.log(food_info);
+      },
+
+      //清空购物车
+      onClearShop: function () {
+        this.menuItem.splice(0, this.menuItem.length);
+        this.foodNums = 0;
       },
 
       //关闭口味选择窗口
@@ -284,7 +307,6 @@
         }
         console.log(tasteList, taste);
         this.isShowNorm = false;
-
         this.selectedTaste = taste;
       },
       onRedirectToPay: function () {

@@ -1,10 +1,34 @@
 <template>
   <div class="pay_container">
-    <div>
-      下单
+    <div class="top_first">
+      <span @click="goback()">&lt;</span>下单
     </div>
-    <div>{{shopName}}</div>
-    <div>{{tableName}}</div>
+    <div class="shopname_div">
+      {{shopName}}
+    </div>
+    <div class="tablename_div">{{tableName}}</div>
+    <div class="menu_div">
+      <ul>
+        <li v-for="item in menus">
+          <div class="Img_div"></div>
+          <div class="menu_list_div">
+            <p class="menu_name_p">{{item.name}}<span class="cost_span">&yen;{{item.cost}}</span></p>
+            <span class="num_span">
+              x{{item.num}}
+            </span>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="shopcart_div">
+
+      <div class="remark_div">
+        <input type="text" placeholder="备注"/>
+      </div>
+      <div class="result_div" v-if="">
+        <span class="result_first_span">合计</span><span class="total_money_span">&yen;</span><span class="signin_span">提交订单</span>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -13,17 +37,35 @@
     name: 'Pay',
     data(){
       return {
+//        shopInfo:new Object(),
+        tableName: null,
         shopName: null,
-        tableName:null
+        menus: []
       }
     },
-    create(){
+    created(){
       var _this = this;
       eventBus.$on("PayAttrDeliver", function (val) {
+//        _this.shopName=val.data.shopName;
         _this.tableName = val.tableName;
-        _this.shopName = val.data.shopname;
+        _this.shopName = val.shopName;
+        _this.menus = val.data;
       });
+    },
+    methods:{
+      goback:function () {
+        history.go(-1)
+      }
     }
+//    mounted(){
+//      var _this = this;
+//      eventBus.$on("PayAttrDeliver", function (val) {
+////        _this.shopName=val.data.shopName;
+//        _this.tableName = val.data.tableName;
+//        _this.shopName = val.data.shopName;
+//        _this.menus = val.data.menus;
+//      });
+//    }
   }
 </script>
 <style scoped>
@@ -32,5 +74,122 @@
     height: 100%;
     margin: 0em;
     padding: 0em;
+    display: flex;
+    flex-direction: column;
   }
+
+  .top_first {
+    background: #353E4C;
+    color: #ffffff;
+    padding: 1em;
+  }
+
+  .top_first span {
+    display: inline-block;
+    height: inherit;
+    font-size: 1em;
+    padding: 0em 0.625em;
+  }
+
+  .shopname_div, .tablename_div {
+    width: 100%;
+    background: #F4F8F9;
+    padding: 0.3125em -1em 0.625em 1em;
+  }
+
+  .shopname_div {
+    color: #94A4AE;
+  }
+
+  .menu_div {
+    width: 100%;
+    flex-grow: 1;
+    background: #F4F8F9;
+  }
+
+  .shopcart_div {
+    width: 100%;
+  }
+
+  .menu_div ul {
+    list-style: none;
+    width: 100%;
+    height: 100%;
+    padding: 0em;
+    margin: 0em;
+  }
+
+  .menu_div ul li {
+    display: flex;
+    background: #ffffff;
+    border-bottom: 1px solid #F4F8F9;;
+    flex-direction: row;
+    padding: 0.625em 0.625em 0.3125em 1em;
+  }
+
+  .Img_div {
+    background: #000000;
+    width: 20%;
+    height: inherit;
+  }
+
+  .menu_list_div {
+    padding: 0.3125em 0.625em;
+    flex-grow: 1;
+  }
+
+  .menu_list_div .menu_name_p {
+    margin: 0em;
+    width: 100%;
+  }
+
+  .menu_list_div .cost_span {
+    display: block;
+    float: right;
+  }
+
+  .num_span {
+    display: block;
+    color: #91A4AD;
+    padding: 0.3125em 0em 0.625em 0em;
+  }
+
+  .result_div {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .remark_div {
+    width: 100%;
+  }
+
+  .remark_div input[type="text"] {
+    width: 98%;
+    /*margin: 0.625em;*/
+    padding: 0.625em 1%;
+    border: 0em;
+  }
+
+  .signin_span {
+    color: #ffffff;
+    background: #F3712D;
+    font-size: 0.875em;
+    padding: 1em;
+  }
+
+  .result_first_span {
+    flex-grow: 1;
+    color: #91A4AD;
+    font-size: 0.75em;
+    padding: 0em 0em 0em 1em;
+  }
+
+  .total_money_span {
+    flex-grow: 6;
+    color: #F3712D;
+    font-weight: 600;
+  }
+
 </style>

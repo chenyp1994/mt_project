@@ -62,9 +62,9 @@
         </div>
         <div class="room_main_form">
           <label>就餐人数</label>
-          <input placeholder="请输入人数"/>
+          <input placeholder="请输入人数" id="mealsNumbel_Input"/>
           <label>服务员</label>
-          <select>
+          <select id="employeeId_select">
             <option value="" disabled selected>请选择服务员</option>
             <option>001</option>
           </select>
@@ -91,7 +91,8 @@
         merchanData: [],
         shopname: null,
         rooms: [],
-        openRoom: []
+        openRoom: [],
+        requestData:new Object()
       }
     },
 
@@ -110,7 +111,10 @@
 //      this.rooms=lists[0].rooms
     },
     beforeDestroy (){
-      eventBus.$emit("AttrDeliver", {tableName: this.openRoom.title, data: this.merchanData});
+      eventBus.$emit("AttrDeliver", {tableName: this.openRoom.title,data: this.merchanData});
+    },
+    destroyed(){
+      eventBus.$off('AttrDeliver');
     },
     methods: {
       toggle: function (index) {
@@ -129,6 +133,14 @@
           '/room', 'Room'
         );
         document.getElementById("roomopendiv").setAttribute("class", "no_display_room");
+        var employeeId_select = document.getElementById("employeeId_select");
+        var employeeId = employeeId_select.value;
+        var mealsNumbel_Input = document.getElementById("mealsNumbel_Input");
+        var mealsNumbel = mealsNumbel_Input.value;
+        this.requestData.employeeId = employeeId;
+        this.requestData.mealsNumbel = mealsNumbel;
+       //alert(employeeId+mealsNumbel);
+
 //        var menu_div = document.getElementById("menu_div");
 //        menu_div.setAttribute("class", "display_menu")
       }
