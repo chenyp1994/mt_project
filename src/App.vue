@@ -8,7 +8,22 @@
 <script>
 export default {
   name: 'App',
-  create(){
+  created(){
+    let url = window.location.search;
+    let obj = {};
+    let reg = /[?&][^?&]+=[^?&]+/g;
+    let arr = url.match(reg);
+    // ['?id=12345', '&a=b']
+    if (arr) {
+      arr.forEach((item) => {
+        let tempArr = item.substring(1).split('=');
+        // 因为tempArr是url中的参数，所以要用decode进行转化
+        let key = decodeURIComponent(tempArr[0]);
+        let val = decodeURIComponent(tempArr[1]);
+        obj[key] = val;
+      });
+      window.localStorage.setItem("urlData",JSON.stringify(obj));
+    }
 
   }
 }

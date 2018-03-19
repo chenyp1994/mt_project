@@ -79,7 +79,7 @@
         <div class="food_center_price">
           <span class="trueprice_span">&yen;{{food_info.cost}}</span>
           <span class="oriprice_span">&yen;{{food_info.retailPrice}}</span><span class="ladu_span">（微辣）</span>
-          <span class="food_center_shopcart_span" @click="onAddFood(food_info)">
+          <span class="food_center_shopcart_span" @click="onAddFoodItem(food_info)">
             <img src="../../assets/shopcart_s.png"/>加入购物车</span>
         </div>
       </div>
@@ -109,7 +109,7 @@
         </span>
         <span><img
           src="../../assets/shopcart.png"></span></span>
-        <p class="price_span" @click="onDisplayShop(isShop)">&yen;76.50</p>
+        <p class="price_span" @click="onDisplayShop(isShop)">&yen;{{totalPrice}}</p>
         <span class="pay_span" @click="onRedirectToPay()">去下单</span></div>
     </div>
     <div v-show="isShowNorm" class="taste_div" id="taste_div">
@@ -148,10 +148,14 @@
         menuItem: new Array(),//购物车里的菜单
         isShowNorm: false,
         tasteEntity: [],
-        selectedTaste: []
+        selectedTaste: [],
+        totalPrice: 0
       }
     },
 
+    mounted(){
+
+    },
     created(){
       let getData = {
         'mer': '1',
@@ -168,17 +172,19 @@
 //        this.rooms = res.data.table[1].shopTableList;
 //      });
       var _this = this;
-      eventBus.$on("AttrDeliver", function (val) {
-        _this.tableName = val.tableName;
-        _this.shopName = val.data.shopname;
-        _this.goods = val.data.goods;
-        _this.menus = val.data.goods[0].foods;
-        for (var m = 0; m < _this.goods.length; m++) {
-          for (var i = 0; i < _this.goods[m].foods.length; i++) {
-            _this.goods[m].foods[i].num = 0;
-          }
+      _this.goods = JSON.parse(window.localStorage.getItem("AllData")).goods;
+      console.log(_this.goods);
+      _this.menus = _this.goods[0].foods;
+      _this.shopName = JSON.parse(window.localStorage.getItem("AllData")).shopname;
+      _this.tableName = window.localStorage.getItem("tableName");
+      for (var m = 0; m < _this.goods.length; m++) {
+        for (var i = 0; i < _this.goods[m].foods.length; i++) {
+          _this.goods[m].foods[i].num = 0;
         }
-      });
+      }
+//      eventBus.$on("AttrDeliver", function (val) {
+//        _this.tableName = val.tableName;
+//      });
     },
 
     beforeDestroy (){
@@ -186,8 +192,13 @@
       var shopInfo = new Object();
       shopInfo.shopName = _this.shopName;
       shopInfo.tableName = _this.tableName;
-      alert(_this.shopName);
-      eventBus.$emit("PayAttrDeliver", {tableName: this.tableName, shopName: this.shopName, data: this.menuItem});
+//      alert(_this.shopName);
+      eventBus.$emit("PayAttrDeliver", {
+        tableName: this.tableName,
+        shopName: this.shopName,
+        totalPrice: this.totalPrice,
+        data: this.menuItem
+      });
     },
 
 //    destroyed(){
@@ -217,6 +228,7 @@
       onAddFood: function (food_info) {
         this.foodNums++;
         food_info.num++;
+        this.totalPrice += food_info.cost;
         var menuitem;
         menuitem = JSON.parse(JSON.stringify(food_info));
         this.menuItem.push(menuitem);
@@ -226,7 +238,7 @@
       //点击选规格按钮后的加号按钮方法
       onAddFoodItem: function (fooditem) {
         this.foodNums++;
-
+        this.totalPrice += fooditem.cost;
         //找id一样的菜单
         var isSameid = this.menuItem.findIndex(x => x.id == fooditem.id);
         var isSameTaste;
@@ -252,6 +264,7 @@
         } else {
           var isSameID = this.menus.findIndex(x => x.id == food_info.id);
           var shopItemId = this.menuItem.findIndex(x => x.id == food_info.id);
+          this.totalPrice -= food_info.cost;
           if (isSameID != -1) {
             this.foodNums--;
             this.menus[isSameID].num--;
@@ -286,7 +299,15 @@
       //清空购物车
       onClearShop: function () {
         this.menuItem.splice(0, this.menuItem.length);
+        for (var i = 0; i < this.menus.length; i++) {
+          if (this.menus[i].num != 0) {
+            this.menus[i].num = 0;
+          } else {
+            continue;
+          }
+        }
         this.foodNums = 0;
+        this.totalPrice = 0;
       },
 
       //关闭口味选择窗口

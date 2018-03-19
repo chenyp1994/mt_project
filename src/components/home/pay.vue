@@ -26,13 +26,14 @@
         <input type="text" placeholder="备注"/>
       </div>
       <div class="result_div" v-if="">
-        <span class="result_first_span">合计</span><span class="total_money_span">&yen;</span><span class="signin_span">提交订单</span>
+        <span class="result_first_span">合计</span><span class="total_money_span">&yen;{{totalPrice}}</span><span class="signin_span" @click="onDownOrder()">提交订单</span>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+  import axios from 'axios'
   export default{
     name: 'Pay',
     data(){
@@ -40,21 +41,41 @@
 //        shopInfo:new Object(),
         tableName: null,
         shopName: null,
-        menus: []
+        menus: [],
+        totalPrice: 0
       }
     },
     created(){
       var _this = this;
+      console.log(window.localStorage);
       eventBus.$on("PayAttrDeliver", function (val) {
 //        _this.shopName=val.data.shopName;
         _this.tableName = val.tableName;
         _this.shopName = val.shopName;
         _this.menus = val.data;
+        _this.totalPrice = val.totalPrice;
+        _this.totalPrice = val.totalPrice;
       });
     },
-    methods:{
-      goback:function () {
+    methods: {
+      goback: function () {
         history.go(-1)
+      },
+      onDownOrder:function () {
+        var order = [];
+        for(var i =0;i<this.menus.length;i++){
+          var orderItem= new Object();
+          orderItem.foodId="";
+          orderItem.foodName="";
+          orderItem.qty="";
+          orderItem.price="";
+          order.push(orderItem);
+        };
+        let requestData={
+            "orderInfo":{
+                "shopId":"","tableId":"","mealsNumbel":"","employeeId":"","orderItem":JSON.stringify(order)
+            }
+        }
       }
     }
 //    mounted(){

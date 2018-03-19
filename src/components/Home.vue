@@ -92,7 +92,7 @@
         shopname: null,
         rooms: [],
         openRoom: [],
-        requestData:new Object()
+        requestData: new Object()
       }
     },
 
@@ -101,7 +101,7 @@
         'mer': '1',
         'sho': '66'
       }
-      axios.get('../../static/respons.json').then((res) => {
+      axios.get('./static/respons.json').then((res) => {
         console.log(res);
         this.merchanData = res.data;
         this.shopname = res.data.shopname;
@@ -111,7 +111,8 @@
 //      this.rooms=lists[0].rooms
     },
     beforeDestroy (){
-      eventBus.$emit("AttrDeliver", {tableName: this.openRoom.title,data: this.merchanData});
+      eventBus.$emit("AttrDeliver", {tableName: this.openRoom.title});
+      window.localStorage.setItem("tableName", this.openRoom.title);
     },
     destroyed(){
       eventBus.$off('AttrDeliver');
@@ -139,7 +140,9 @@
         var mealsNumbel = mealsNumbel_Input.value;
         this.requestData.employeeId = employeeId;
         this.requestData.mealsNumbel = mealsNumbel;
-       //alert(employeeId+mealsNumbel);
+        window.localStorage.setItem("AllData", JSON.stringify(this.merchanData));
+        console.log(window.localStorage);
+        //alert(employeeId+mealsNumbel);
 
 //        var menu_div = document.getElementById("menu_div");
 //        menu_div.setAttribute("class", "display_menu")
