@@ -4,7 +4,7 @@
       <span @click="goback()">&lt;</span>下单
     </div>
     <div class="shopname_div">
-      {{shopName}}
+      <span><img src="../../assets/shop_color.png"/></span>{{shopName}}
     </div>
     <div class="tablename_div">{{tableName}}</div>
     <div class="menu_div">
@@ -26,7 +26,8 @@
         <input type="text" placeholder="备注"/>
       </div>
       <div class="result_div" v-if="">
-        <span class="result_first_span">合计</span><span class="total_money_span">&yen;{{totalPrice}}</span><span class="signin_span" @click="onDownOrder()">提交订单</span>
+        <span class="result_first_span">合计</span><span class="total_money_span">&yen;{{totalPrice}}</span><span
+        class="signin_span" @click="onDownOrder()">提交订单</span>
       </div>
     </div>
   </div>
@@ -61,20 +62,21 @@
       goback: function () {
         history.go(-1)
       },
-      onDownOrder:function () {
+      onDownOrder: function () {
         var order = [];
-        for(var i =0;i<this.menus.length;i++){
-          var orderItem= new Object();
-          orderItem.foodId="";
-          orderItem.foodName="";
-          orderItem.qty="";
-          orderItem.price="";
+        for (var i = 0; i < this.menus.length; i++) {
+          var orderItem = new Object();
+          orderItem.foodId = "";
+          orderItem.foodName = "";
+          orderItem.qty = "";
+          orderItem.price = "";
           order.push(orderItem);
-        };
-        let requestData={
-            "orderInfo":{
-                "shopId":"","tableId":"","mealsNumbel":"","employeeId":"","orderItem":JSON.stringify(order)
-            }
+        }
+        ;
+        let requestData = {
+          "orderInfo": {
+            "shopId": "", "tableId": "", "mealsNumbel": "", "employeeId": "", "orderItem": JSON.stringify(order)
+          }
         }
       }
     }
@@ -113,13 +115,20 @@
   }
 
   .shopname_div, .tablename_div {
-    width: 100%;
+    width: 94%;
     background: #F4F8F9;
-    padding: 0.3125em -1em 0.625em 1em;
+    padding: 0.3125em 3% 0.625em 3%;
   }
 
   .shopname_div {
     color: #94A4AE;
+  }
+
+  .shopname_div span {
+    padding: 0.3125em;
+    margin: 0em 0.625em 0em 0em;
+    /*background: #000000;*/
+    display: inline-block;
   }
 
   .menu_div {

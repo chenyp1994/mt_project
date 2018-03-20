@@ -5,7 +5,7 @@
       <p>{{tableName}}</p>
     </div>
     <div class="titlebar_room">
-      <span><img src=""/></span>
+      <span><img src="../../assets/shop_color.png"/></span>
       <p>{{shopName}}</p>
     </div>
     <div class="maindiv">
@@ -173,18 +173,26 @@
 //      });
       var _this = this;
       _this.goods = JSON.parse(window.localStorage.getItem("AllData")).goods;
-      console.log(_this.goods);
+//      console.log(_this.goods);
       _this.menus = _this.goods[0].foods;
       _this.shopName = JSON.parse(window.localStorage.getItem("AllData")).shopname;
-      _this.tableName = window.localStorage.getItem("tableName");
+//      _this.tableName = window.localStorage.getItem("tableName");
+      if (_this.tableName != window.localStorage.getItem("tableName")) {
+        _this.tableName = window.localStorage.getItem("tableName");
+      }
+      if (_this.menuItem != window.localStorage.getItem("downMenu")) {
+        _this.menuItem = window.localStorage.getItem("downMenu");
+      }
       for (var m = 0; m < _this.goods.length; m++) {
         for (var i = 0; i < _this.goods[m].foods.length; i++) {
           _this.goods[m].foods[i].num = 0;
         }
       }
-//      eventBus.$on("AttrDeliver", function (val) {
-//        _this.tableName = val.tableName;
-//      });
+      eventBus.$on("AttrDeliver", function (val) {
+        _this.tableName = val.tableName;
+        window.localStorage.removeItem("tableName");
+        window.localStorage.setItem("tableName", _this.tableName);
+      });
     },
 
     beforeDestroy (){
@@ -199,6 +207,8 @@
         totalPrice: this.totalPrice,
         data: this.menuItem
       });
+      window.localStorage.removeItem("downMenu");
+      window.localStorage.setItem("downMenu", this.menuItem);
     },
 
 //    destroyed(){

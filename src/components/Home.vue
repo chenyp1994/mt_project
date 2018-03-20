@@ -5,7 +5,7 @@
       <p>桌台状态</p>
     </div>
     <div id="titlebar_home">
-      <img src=""/>
+      <img src="../assets/shop_color.png"/>
       <p>{{shopname}}</p>
     </div>
     <div class="maindiv">
@@ -13,7 +13,7 @@
         <ul>
           <li v-for="(item, index) in lists" v-bind:class="{active:index == num}" @mouseover="toggle(index)">
             <img :src="item.img_url">
-            {{item.name + index}}
+            {{item.name}}
           </li>
         </ul>
       </div>
@@ -66,7 +66,7 @@
           <label>服务员</label>
           <select id="employeeId_select">
             <option value="" disabled selected>请选择服务员</option>
-            <option>001</option>
+            <option value="001">001</option>
           </select>
           <div class="room_btn_div">
             <button>开台</button>
@@ -101,7 +101,8 @@
         'mer': '1',
         'sho': '66'
       }
-      axios.get('./static/respons.json').then((res) => {
+      //./static/respons.json
+      axios.get('../static/respons.json').then((res) => {
         console.log(res);
         this.merchanData = res.data;
         this.shopname = res.data.shopname;
@@ -112,7 +113,7 @@
     },
     beforeDestroy (){
       eventBus.$emit("AttrDeliver", {tableName: this.openRoom.title});
-      window.localStorage.setItem("tableName", this.openRoom.title);
+
     },
     destroyed(){
       eventBus.$off('AttrDeliver');
