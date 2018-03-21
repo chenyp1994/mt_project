@@ -1975,7 +1975,7 @@
           "tableNo": "1003",
           "floor": 1,
           "category": 1,
-          "status": 0,
+          "status": 1,
           "menuId": null,
           "seatNum": 4,
           "createTime": 1516704597000,
@@ -1989,7 +1989,7 @@
           "tableNo": "1003",
           "floor": 1,
           "category": 1,
-          "status": 0,
+          "status": 2,
           "menuId": null,
           "seatNum": 4,
           "createTime": 1516704597000,
@@ -2003,7 +2003,7 @@
           "tableNo": "1004",
           "floor": 1,
           "category": 1,
-          "status": 0,
+          "status": 3,
           "menuId": null,
           "seatNum": 4,
           "createTime": 1516704597000,
@@ -2017,7 +2017,7 @@
           "tableNo": "10",
           "floor": null,
           "category": 1,
-          "status": 0,
+          "status": 4,
           "menuId": null,
           "seatNum": 21,
           "createTime": 1516773592000,
@@ -2031,7 +2031,7 @@
           "tableNo": "11",
           "floor": null,
           "category": 1,
-          "status": 0,
+          "status": 5,
           "menuId": null,
           "seatNum": 21,
           "createTime": 1516773592000,
@@ -2624,17 +2624,6 @@
           "updateTime": 1516704691000
         }
       ]
-    },
-    {
-      "id": 3,
-      "merchantId": 1,
-      "shopId": 66,
-      "name": "房间",
-      "teaFee": 20,
-      "lowerCost": 200,
-      "createTime": 1502737038000,
-      "updateTime": 1513909063000,
-      "shopTableList": []
     }
   ]
 }

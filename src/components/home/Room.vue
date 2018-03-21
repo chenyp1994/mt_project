@@ -1,8 +1,8 @@
 <template>
   <div class="container" id="menu_div">
     <div class="topbar_room">
-      <img src="../../assets/goback.png"/>
-      <p>{{tableName}}</p>
+      <span @click="goback()">&lt;</span>
+      {{tableName}}
     </div>
     <div class="titlebar_room">
       <span><img src="../../assets/shop_color.png"/></span>
@@ -23,7 +23,7 @@
       </div>
       <div class="mainmenu_div">
         <div class="food_div" v-for="(item, index) in menus">
-          <div class="menuimg_div"></div>
+          <div class="menuimg_div"><span></span></div>
           <div class=food_item_div><span class="food_name_span">{{item.name}}</span>
             <p class="money_p">&yen;&nbsp;{{item.cost}}
               <span @click="onChooseNorms(item,$event)" class="norms_span"
@@ -67,7 +67,7 @@
           <!--<p>辣度</p>-->
           <!--<label class="ladu_label"><input type="radio"/>微辣</label>-->
           <span @click="onShowNorms(food_info)" class="taste_select_span">选择口味</span>
-          <input type="text" readonly/>
+          <input type="text" readonly placeholder="这里是选择的口味"/>
           <!--<ul>-->
           <!--<li class="norm_la">微辣</li>-->
           <!--<li class="norm_la">中辣</li>-->
@@ -162,9 +162,9 @@
         'sho': '66'
       };
 //      axios.get('../../../static/respons.json').then((res) => {
-//        axios.get('../../static/data.json').then((res) => {
-//          this.goods = res.data.goods;
-//        });
+//      axios.get('../static/data.json').then((res) => {
+//        this.goods = res.data.goods;
+//      });
 //        console.log(res);
 //        this.merchanData = res.data;
 //        this.shopname = res.data.shopname;
@@ -176,13 +176,13 @@
 //      console.log(_this.goods);
       _this.menus = _this.goods[0].foods;
       _this.shopName = JSON.parse(window.localStorage.getItem("AllData")).shopname;
-//      _this.tableName = window.localStorage.getItem("tableName");
-      if (_this.tableName != window.localStorage.getItem("tableName")) {
-        _this.tableName = window.localStorage.getItem("tableName");
-      }
-      if (_this.menuItem != window.localStorage.getItem("downMenu")) {
-        _this.menuItem = window.localStorage.getItem("downMenu");
-      }
+      _this.tableName = window.localStorage.getItem("tableName");
+//      if (_this.tableName != window.localStorage.getItem("tableName")) {
+//        _this.tableName = window.localStorage.getItem("tableName");
+//      }
+//      if (_this.menuItem != window.localStorage.getItem("downMenu")) {
+//        _this.menuItem = window.localStorage.getItem("downMenu");
+//      }
       for (var m = 0; m < _this.goods.length; m++) {
         for (var i = 0; i < _this.goods[m].foods.length; i++) {
           _this.goods[m].foods[i].num = 0;

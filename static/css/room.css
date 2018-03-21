@@ -16,6 +16,12 @@
   display: flex;
   align-items: center;
 }
+.topbar_room span {
+  display: inline-block;
+  height: inherit;
+  font-size: 1em;
+  padding: 0em 0.625em;
+}
 
 .titlebar_room {
   width: 92%;
@@ -64,21 +70,30 @@
   width: 100%;
   float: left;
   background: rgb(244, 248, 249);
+  border-bottom: 1px solid rgb(230, 230, 230);
   /*flex: 2;*/
   /*height: 100%;*/
 }
 
 .menuimg_div {
   width: 25%;
-  height: 3em;
-  background: #000;
+  /*height: 100%;*/
   float: left;
+  display: flex;
+  justify-content: center;
+}
+
+.menuimg_div span {
+  display: inline-block;
+  margin: 0.3125em 0em 2px 0.3125em;
+  padding: 50%;
+  background: #000;
 }
 
 .food_item_div {
   width: 70%;
   float: left;
-  padding: 0em 0em 0em 0.625em;
+  padding: 0.625em 0em 0em 0.625em;
 }
 
 .food_name_span {
@@ -118,6 +133,7 @@
   list-style: none;
   width: 100%;
   overflow: scroll;
+  margin: 0em;
   float: left;
   padding: 0.3125em 0px;
   background: #f4f4f4;
@@ -129,6 +145,7 @@
   /*text-align: center;*/
   display: flex;
   color: #263238;
+  border-bottom: 1px solid rgb(230, 230, 230);
   align-items: center;
   justify-content: center;
 }
@@ -217,7 +234,7 @@
 
 .foodname_div p {
   margin: 0;
-  padding: 1em;
+  padding: 1em 1em 0em;
 }
 
 .foodname_div span {
@@ -229,6 +246,7 @@
 .norm_span, .norm_la {
   display: inline-block;
   padding: 0.25em 0.75em;
+  font-size: 0.825em;
   float: left;
   margin-right: 0.625em;
   border: 1px solid #C6CDD4;
@@ -237,6 +255,10 @@
 
 .norm_span:hover, .norm_la:hover {
   border-color: #e67500;
+}
+
+.norms_la {
+  font-size: 0.875em;
 }
 
 .ladu_label input[type="checkbox"] {
@@ -256,7 +278,8 @@
   background: #e67500;
   display: inline-block;
   color: #ffffff;
-  padding: 0.3125em;
+  font-size: 0.825em;
+  padding: 0.3125em 0.625em;
   margin: 0.625em;
   border-radius: 3px;
 }
@@ -283,10 +306,19 @@
 }
 
 .food_center_laduInfo input {
-  display: inline-block;
+  /*display: inline-block;*/
+  /*appearance:none;*/
+  /*-webkit-appearance: none;*/
+  /*-moz-appearance: none;*/
   width: 90%;
-  padding: 0.3125em 0em;
+  padding: 0.625em 0em;
   margin: 0.3125em -2em 0.3125em 1em;
+  border-radius: 3px;
+  border: 1px solid #cdcdcd;
+}
+
+.food_center_laduInfo input::placeholder {
+  padding-left: 0.625em;
 }
 
 .food_center_normInfo span {

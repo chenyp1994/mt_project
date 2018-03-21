@@ -1,18 +1,19 @@
 <template>
   <div class="container">
     <div id="topbar_home">
-      <img src="../assets/goback.png"/>
-      <p>桌台状态</p>
+      <span @click="goback()">&lt;</span>
+      <!--<img src="../assets/goback.png"/>-->
+      桌台状态
     </div>
     <div id="titlebar_home">
-      <img src="../assets/shop_color.png"/>
+      <span><img src="../assets/shop_color.png"/></span>
       <p>{{shopname}}</p>
     </div>
     <div class="maindiv">
       <div class="navdiv">
         <ul>
           <li v-for="(item, index) in lists" v-bind:class="{active:index == num}" @mouseover="toggle(index)">
-            <img :src="item.img_url">
+            <span><img src="../assets/hall.png"></span>
             {{item.name}}
           </li>
         </ul>
@@ -64,10 +65,11 @@
           <label>就餐人数</label>
           <input placeholder="请输入人数" id="mealsNumbel_Input"/>
           <label>服务员</label>
-          <select id="employeeId_select">
-            <option value="" disabled selected>请选择服务员</option>
-            <option value="001">001</option>
-          </select>
+          <input placeholder="001服务员" readonly/>
+          <!--<select id="employeeId_select">-->
+          <!--<option value="" disabled selected>请选择服务员</option>-->
+          <!--<option value="001">001</option>-->
+          <!--</select>-->
           <div class="room_btn_div">
             <button>开台</button>
             <button @click="onOpenDesk()">开台并点餐</button>
@@ -87,7 +89,7 @@
     data(){
       return {
         lists: [],
-        num: 1,
+        num: 0,
         merchanData: [],
         shopname: null,
         rooms: [],
@@ -101,9 +103,9 @@
         'mer': '1',
         'sho': '66'
       }
-      //./static/respons.json
-      axios.get('../static/respons.json').then((res) => {
-        console.log(res);
+      //../static/respons.json
+      axios.get('./static/respons.json').then((res) => {
+//        console.log(res);
         this.merchanData = res.data;
         this.shopname = res.data.shopname;
         this.lists = res.data.table;
@@ -135,12 +137,12 @@
           '/room', 'Room'
         );
         document.getElementById("roomopendiv").setAttribute("class", "no_display_room");
-        var employeeId_select = document.getElementById("employeeId_select");
-        var employeeId = employeeId_select.value;
-        var mealsNumbel_Input = document.getElementById("mealsNumbel_Input");
-        var mealsNumbel = mealsNumbel_Input.value;
-        this.requestData.employeeId = employeeId;
-        this.requestData.mealsNumbel = mealsNumbel;
+//        var employeeId_select = document.getElementById("employeeId_select");
+//        var employeeId = employeeId_select.value;
+//        var mealsNumbel_Input = document.getElementById("mealsNumbel_Input");
+//        var mealsNumbel = mealsNumbel_Input.value;
+//        this.requestData.employeeId = employeeId;
+//        this.requestData.mealsNumbel = mealsNumbel;
         window.localStorage.setItem("AllData", JSON.stringify(this.merchanData));
         console.log(window.localStorage);
         //alert(employeeId+mealsNumbel);

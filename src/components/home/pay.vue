@@ -26,8 +26,12 @@
         <input type="text" placeholder="备注"/>
       </div>
       <div class="result_div" v-if="">
-        <span class="result_first_span">合计</span><span class="total_money_span">&yen;{{totalPrice}}</span><span
-        class="signin_span" @click="onDownOrder()">提交订单</span>
+        <span class="result_first_span">合计</span><span class="total_money_span">&yen;{{totalPrice}}</span>
+        <span class="signin_span" @click="onDownOrder()"
+        v-if="payornot">提交订单</span>
+        <span v-else="">
+          结算
+        </span>
       </div>
     </div>
   </div>
@@ -43,7 +47,8 @@
         tableName: null,
         shopName: null,
         menus: [],
-        totalPrice: 0
+        totalPrice: 0,
+        payornot:true
       }
     },
     created(){
@@ -165,6 +170,7 @@
 
   .menu_list_div {
     padding: 0.3125em 0.625em;
+    font-size: 0.875em;
     flex-grow: 1;
   }
 
@@ -189,6 +195,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    border-top: 1px solid rgba(0,0,0,.1);
   }
 
   .remark_div {
@@ -196,9 +203,10 @@
   }
 
   .remark_div input[type="text"] {
-    width: 98%;
+    width: 92%;
     /*margin: 0.625em;*/
-    padding: 0.625em 1%;
+    padding: 0.875em 4%;
+    font-size: 0.875em;
     border: 0em;
   }
 
@@ -212,7 +220,7 @@
   .result_first_span {
     flex-grow: 1;
     color: #91A4AD;
-    font-size: 0.75em;
+    font-size: 0.875em;
     padding: 0em 0em 0em 1em;
   }
 
