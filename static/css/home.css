@@ -160,7 +160,7 @@
 }
 
 .desk_4 p, .desk_0 p, .desk_1 p, .desk_2 p, .desk_3 p:first-child, .desk_5 p {
-  margin: 1em 0em 0.625em 0em;
+  margin: 1em 0em 0em 0em;
 }
 
 .desk_4 p:last-child, .desk_5 p:last-child, .desk_0 p:last-child {

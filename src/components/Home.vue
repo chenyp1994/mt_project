@@ -34,7 +34,7 @@
             <p>
               {{room.title}}
             </p>
-            <p>可供{{room.seatNum}}人</p>
+            <p style="margin-top: 0em">可供{{room.seatNum}}人</p>
           </div>
           <div :class="[ 'desk_'+room.status,'roomdiv']" v-else-if="room.status==3">
             <p>
@@ -51,7 +51,7 @@
               <p>未下单</p>
             </div>
             <div v-else :class="'bottom_div_'+room.status">
-              <p>可供{{room.seatNum}}人</p>
+              <p style="margin-top: 0em">可供{{room.seatNum}}人</p>
             </div>
           </div>
         </div>
@@ -106,7 +106,7 @@
         'sho': '66'
       }
       //./static/respons.json
-      axios.get('./static/respons.json').then((res) => {
+      axios.get('../static/respons.json').then((res) => {
 //        console.log(res);
         this.merchanData = res.data;
         this.shopname = res.data.shopname;
