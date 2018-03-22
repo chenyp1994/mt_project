@@ -2624,6 +2624,17 @@
           "updateTime": 1516704691000
         }
       ]
+    },
+    {
+      "id": 3,
+      "merchantId": 1,
+      "shopId": 66,
+      "name": "房间",
+      "teaFee": 20,
+      "lowerCost": 200,
+      "createTime": 1502737038000,
+      "updateTime": 1513909063000,
+      "shopTableList":[]
     }
   ]
 }

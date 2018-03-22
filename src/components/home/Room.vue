@@ -173,8 +173,7 @@
 //      });
       var _this = this;
       _this.goods = JSON.parse(window.localStorage.getItem("AllData")).goods;
-//      console.log(_this.goods);
-      _this.menus = _this.goods[0].foods;
+      _this.menus = _this.goods[_this.num].foods;
       _this.shopName = JSON.parse(window.localStorage.getItem("AllData")).shopname;
       _this.tableName = window.localStorage.getItem("tableName");
 //      if (_this.tableName != window.localStorage.getItem("tableName")) {
@@ -202,13 +201,13 @@
       shopInfo.tableName = _this.tableName;
 //      alert(_this.shopName);
       eventBus.$emit("PayAttrDeliver", {
-        tableName: this.tableName,
-        shopName: this.shopName,
-        totalPrice: this.totalPrice,
-        data: this.menuItem
+        tableName: _this.tableName,
+        shopName: _this.shopName,
+        totalPrice: _this.totalPrice,
+        data: _this.menuItem
       });
       window.localStorage.removeItem("downMenu");
-      window.localStorage.setItem("downMenu", this.menuItem);
+      window.localStorage.setItem("downMenu", JSON.stringify(_this.menuItem));
     },
 
 //    destroyed(){

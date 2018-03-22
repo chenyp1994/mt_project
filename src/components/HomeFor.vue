@@ -9,49 +9,57 @@
       <span><img src="../assets/shop_color.png"/></span>
       <p>{{shopname}}</p>
     </div>
-    <div class="maindiv">
-      <div class="navdiv">
-        <ul>
+    <div class="maindiv_forguest">
+      <div class="navdiv_forguest">
+        <ul class="top_nav">
           <li v-for="(item, index) in lists" v-bind:class="{active:index == num}" @click="toggle(index)">
-            <span><img src="../assets/hall.png"></span>
-            {{item.name}}
+            {{item.title}}
           </li>
         </ul>
       </div>
-      <div class="tabcontent">
-        <div v-for="(room, index) in rooms" @click="onRoomOpen(room)">
-          <div :class="[ 'desk_'+room.status,'roomdiv']" v-if="room.status==1">
-            <span :class="'desk_status_img_'+room.status">订</span>
-            <p>
-              {{room.title}}
-            </p>
-            <div class="desk_bottom_text">
+      <div class="tabcontent_forguest">
+        <div class="status_div">
+          <ul>
+            <li v-for="(item,index) in statusList" v-bind:class="{active:index == num}">
+              {{item.name}}
+            </li>
+          </ul>
+        </div>
+        <div class="tabcontent">
+          <div v-for="(room, index) in rooms" @click="onRoomOpen(room)">
+            <div :class="[ 'desk_'+room.status,'roomdiv']" v-if="room.status==1">
+              <span :class="'desk_status_img_'+room.status">订</span>
+              <p>
+                {{room.title}}
+              </p>
+              <div class="desk_bottom_text">
+                <p>可供{{room.seatNum}}人</p>
+              </div>
+            </div>
+            <div :class="[ 'desk_'+room.status,'roomdiv']" v-else-if="room.status==5||room.status==4">
+              <span :class="'desk_status_img_'+room.status">结</span>
+              <p>
+                {{room.title}}
+              </p>
               <p>可供{{room.seatNum}}人</p>
             </div>
-          </div>
-          <div :class="[ 'desk_'+room.status,'roomdiv']" v-else-if="room.status==5||room.status==4">
-            <span :class="'desk_status_img_'+room.status">结</span>
-            <p>
-              {{room.title}}
-            </p>
-            <p>可供{{room.seatNum}}人</p>
-          </div>
-          <div :class="[ 'desk_'+room.status,'roomdiv']" v-else-if="room.status==3">
-            <p>
-              {{room.title}}
-            </p>
-            <p>&yen;{{room.seatNum}}</p>
-          </div>
-          <div :class="[ 'desk_'+room.status,'roomdiv']" v-else>
-            <span :class="'desk_status_img_'+room.status"></span>
-            <p>
-              {{room.title}}
-            </p>
-            <div v-if="room.status==2" :class="'bottom_div_'+room.status">
-              <p>未下单</p>
+            <div :class="[ 'desk_'+room.status,'roomdiv']" v-else-if="room.status==3">
+              <p>
+                {{room.title}}
+              </p>
+              <p>&yen;{{room.seatNum}}</p>
             </div>
-            <div v-else :class="'bottom_div_'+room.status">
-              <p>可供{{room.seatNum}}人</p>
+            <div :class="[ 'desk_'+room.status,'roomdiv']" v-else>
+              <span :class="'desk_status_img_'+room.status"></span>
+              <p>
+                {{room.title}}
+              </p>
+              <div v-if="room.status==2" :class="'bottom_div_'+room.status">
+                <p>未下单</p>
+              </div>
+              <div v-else :class="'bottom_div_'+room.status">
+                <p>可供{{room.seatNum}}人</p>
+              </div>
             </div>
           </div>
         </div>
@@ -91,6 +99,7 @@
     data(){
       return {
         lists: [],
+        statusList:[],
         num: 0,
         merchanData: [],
         shopname: null,
@@ -106,12 +115,13 @@
         'sho': '66'
       }
       //./static/respons.json
-      axios.get('./static/respons.json').then((res) => {
+      axios.get('../static/data.json').then((res) => {
 //        console.log(res);
         this.merchanData = res.data;
         this.shopname = res.data.shopname;
-        this.lists = res.data.table;
-        this.rooms = res.data.table[1].shopTableList;
+        this.statusList = res.data.list[1].rooms;
+        this.lists = res.data.list;
+        this.rooms = res.data.list[1].rooms[0].desk;
       })
 //      this.rooms=lists[0].rooms
     },

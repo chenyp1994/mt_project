@@ -1,8 +1,8 @@
 {
-  "lists": [
+  "shopname": "海德微信点餐test",
+  "list": [
     {
       "title": "大堂",
-      "img_url": "src/assets/hall.png",
       "index": 0,
       "rooms": [
         {
@@ -30,36 +30,109 @@
       "index": 1,
       "rooms": [
         {
-          "index": 0,
-          "statusText": "345",
-          "status": "1",
-          "text": "3号桌"
+          "name": "全部",
+          "desk": [
+            {
+              "id": 39,
+              "merchantId": 1,
+              "shopId": 66,
+              "title": "一号桌",
+              "tableNo": "1001",
+              "floor": 1,
+              "category": 1,
+              "status": 0,
+              "menuId": null,
+              "seatNum": 4,
+              "createTime": 1516704597000,
+              "updateTime": 1516704691000
+            },
+            {
+              "id": 40,
+              "merchantId": 1,
+              "shopId": 66,
+              "title": "二号桌",
+              "tableNo": "1003",
+              "floor": 1,
+              "category": 1,
+              "status": 1,
+              "menuId": null,
+              "seatNum": 4,
+              "createTime": 1516704597000,
+              "updateTime": 1516704691000
+            },
+            {
+              "id": 41,
+              "merchantId": 1,
+              "shopId": 66,
+              "title": "三号桌",
+              "tableNo": "1003",
+              "floor": 1,
+              "category": 1,
+              "status": 2,
+              "menuId": null,
+              "seatNum": 4,
+              "createTime": 1516704597000,
+              "updateTime": 1516704691000
+            },
+            {
+              "id": 42,
+              "merchantId": 1,
+              "shopId": 66,
+              "title": "四号桌",
+              "tableNo": "1004",
+              "floor": 1,
+              "category": 1,
+              "status": 3,
+              "menuId": null,
+              "seatNum": 4,
+              "createTime": 1516704597000,
+              "updateTime": 1516704691000
+            },
+            {
+              "id": 89,
+              "merchantId": 1,
+              "shopId": 66,
+              "title": "10",
+              "tableNo": "10",
+              "floor": null,
+              "category": 1,
+              "status": 4,
+              "menuId": null,
+              "seatNum": 21,
+              "createTime": 1516773592000,
+              "updateTime": null
+            },
+            {
+              "id": 90,
+              "merchantId": 1,
+              "shopId": 66,
+              "title": "11",
+              "tableNo": "11",
+              "floor": null,
+              "category": 1,
+              "status": 5,
+              "menuId": null,
+              "seatNum": 21,
+              "createTime": 1516773592000,
+              "updateTime": null
+            }
+          ]
         },
         {
-          "index": 1,
-          "statusText": 789,
-          "status": "1",
-          "text": "4号桌"
-        }
-      ]
-    }
-  ],
-  "goods":[
-    {
-      "name":"新品尝鲜",
-      "foods":[
+          "name": "空台",
+          "desk": []
+        },
         {
-          "text":"小米金瓜粥",
-          "price":"5.00"
-        }
-      ]
-    },
-    {
-      "name":"超级套餐",
-      "foods":[
+          "name": "已开台",
+          "desk": []
+        },
         {
-          "text":"红烧肉套餐",
-          "price":"15.00"
+          "name": "已点餐",
+          "desk": []
+        },
+        {
+          "name": "已预定",
+          "desk": []
         }
       ]
     }

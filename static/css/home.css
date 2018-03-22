@@ -108,7 +108,7 @@
 
 .roomdiv {
   width: 30%;
-  height: 5em;
+  height: 4.5em;
   margin-right: 0.375em;
   margin-bottom: 0.375em;
   text-align: center;
@@ -126,6 +126,12 @@
 
 .desk_1 {
   color: #263238;
+  /*font-size: 0.75em;*/
+}
+
+.desk_1 .desk_bottom_text p {
+  font-size: 0.75em;
+  margin: 0em;
 }
 
 .desk_2 .bottom_div_2 {
@@ -153,18 +159,14 @@
   color: #fff;
 }
 
+.desk_4 p, .desk_0 p, .desk_1 p, .desk_2 p, .desk_3 p:first-child, .desk_5 p {
+  margin: 1em 0em 0.625em 0em;
+}
+
 .desk_4 p:last-child, .desk_5 p:last-child, .desk_0 p:last-child {
   color: #94A4AE;
   font-size: 0.75em;
   font-weight: 500;
-}
-
-.desk_4 {
-
-}
-
-.desk_5 {
-
 }
 
 .desk_status_img_0, .desk_status_img_3 {
@@ -332,4 +334,53 @@
   display: none;
 }
 
+/*homeforguest的样式*/
+.navdiv_forguest {
+  width: 100%;
+  float: left;
+  color: #91A4AD;
+  border-bottom: 1px solid rgba(0,0,0,.1);
+}
+.top_nav li{
+  list-style: none;
+  float: left;
+  display: flex;
+  /*align-items: center;*/
+  justify-content: center;
+}
+.tabcontent_forguest{
+  width: 100%;
+  float: left;
+  padding-top: 0.3125em;
+}
+
+.status_div{
+  max-width: 30%;
+  float: left;
+  background: #f4f4f4;
+}
+.status_div ul{
+  width: 100%;
+  list-style: none;
+  /*width: 20%;*/
+  float: left;
+  font-size: 0.875em;
+  padding: 0px;
+  margin: 0em;
+  background: #f4f4f4;
+}
+
+.status_div ul li{
+  width: auto;
+  display: flex;
+  padding: 1em 0.625em;
+  justify-content: center;
+}
+.navdiv_forguest .active{
+  border-bottom:2px solid #e67500;
+}
+
+.status_div .active{
+  background: #ffffff;
+}
 

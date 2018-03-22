@@ -140,6 +140,7 @@
     width: 100%;
     flex-grow: 1;
     background: #F4F8F9;
+    overflow: scroll;
   }
 
   .shopcart_div {
