@@ -12,15 +12,16 @@
     <div class="maindiv_forguest">
       <div class="navdiv_forguest">
         <ul class="top_nav">
-          <li v-for="(item, index) in lists" v-bind:class="{active:index == num}" @click="toggle(index)">
-            {{item.title}}
+          <li v-for="(item, index) in lists" v-bind:class="{active:index == roomnum}" @click="toggle(index)">
+            <span>{{item.title}}</span>
           </li>
         </ul>
       </div>
       <div class="tabcontent_forguest">
         <div class="status_div">
           <ul>
-            <li v-for="(item,index) in statusList" v-bind:class="{active:index == num}">
+            <li v-for="(item,index) in statusList" v-bind:class="{active:index == statusnum}"
+                @click="onToggleStatus(index)">
               {{item.name}}
             </li>
           </ul>
@@ -75,7 +76,7 @@
           <label>就餐人数</label>
           <input placeholder="请输入人数" id="mealsNumbel_Input"/>
           <label>服务员</label>
-          <input placeholder="001服务员" readonly/>
+          <input placeholder="001服务员" readonly value="001" id="employeeId_select"/>
           <!--<select id="employeeId_select">-->
           <!--<option value="" disabled selected>请选择服务员</option>-->
           <!--<option value="001">001</option>-->
@@ -99,8 +100,9 @@
     data(){
       return {
         lists: [],
-        statusList:[],
-        num: 0,
+        statusList: [],
+        roomnum: 0,
+        statusnum: 0,
         merchanData: [],
         shopname: null,
         rooms: [],
@@ -115,27 +117,41 @@
         'sho': '66'
       }
       //./static/respons.json
+      var _this = this;
       axios.get('../static/data.json').then((res) => {
 //        console.log(res);
-        this.merchanData = res.data;
-        this.shopname = res.data.shopname;
-        this.statusList = res.data.list[1].rooms;
-        this.lists = res.data.list;
-        this.rooms = res.data.list[1].rooms[0].desk;
+        _this.merchanData = res.data;
+        _this.shopname = res.data.shopname;
+        _this.statusList = res.data.list[0].rooms;
+        _this.lists = res.data.list;
+        _this.rooms = res.data.list[1].rooms[0].desk;
       })
 //      this.rooms=lists[0].rooms
     },
     beforeDestroy (){
       eventBus.$emit("AttrDeliver", {tableName: this.openRoom.title});
-
     },
     destroyed(){
       eventBus.$off('AttrDeliver');
     },
+    mounted(){
+
+    },
+    watch:{
+      statusList:function (val,oldval) {
+        this.rooms=val[this.statusnum].desk;
+      }
+    },
+
     methods: {
       toggle: function (index) {
-        this.num = index;
-        this.rooms = this.lists[index].shopTableList;
+        this.roomnum = index;
+        this.statusList = this.lists[index].rooms;
+//        this.rooms = this.statusList[0].desk;
+      },
+      onToggleStatus: function (index) {
+        this.statusnum = index;
+        this.rooms = this.statusList[index].desk;
       },
       onRoomOpen: function (room_info) {
         this.openRoom = room_info
@@ -149,14 +165,16 @@
           '/room', 'Room'
         );
         document.getElementById("roomopendiv").setAttribute("class", "no_display_room");
-//        var employeeId_select = document.getElementById("employeeId_select");
-//        var employeeId = employeeId_select.value;
-//        var mealsNumbel_Input = document.getElementById("mealsNumbel_Input");
-//        var mealsNumbel = mealsNumbel_Input.value;
-//        this.requestData.employeeId = employeeId;
-//        this.requestData.mealsNumbel = mealsNumbel;
+        var employeeId_select = document.getElementById("employeeId_select");
+        var employeeId = employeeId_select.value;
+        var mealsNumbel_Input = document.getElementById("mealsNumbel_Input");
+        var mealsNumbel = mealsNumbel_Input.value;
+        this.requestData.employeeId = employeeId;
+        this.requestData.mealsNumbel = mealsNumbel;
         window.localStorage.setItem("AllData", JSON.stringify(this.merchanData));
-//        console.log(window.localStorage);
+        window.localStorage.setItem("employeeId", employeeId);
+        window.localStorage.setItem("mealsNumbel", mealsNumbel);
+        console.log(window.localStorage);
         //alert(employeeId+mealsNumbel);
 
 //        var menu_div = document.getElementById("menu_div");

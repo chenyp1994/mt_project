@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div id="topbar_home">
-      <span @click="goback()">&lt;</span>
+      <span @click="goback()"><img src="../assets/back.png"></span>
       <!--<img src="../assets/goback.png"/>-->
       桌台状态
     </div>
@@ -34,7 +34,7 @@
             <p>
               {{room.title}}
             </p>
-            <p style="margin-top: 0em">可供{{room.seatNum}}人</p>
+            <p>可供{{room.seatNum}}人</p>
           </div>
           <div :class="[ 'desk_'+room.status,'roomdiv']" v-else-if="room.status==3">
             <p>
@@ -51,7 +51,7 @@
               <p>未下单</p>
             </div>
             <div v-else :class="'bottom_div_'+room.status">
-              <p style="margin-top: 0em">可供{{room.seatNum}}人</p>
+              <p>可供{{room.seatNum}}人</p>
             </div>
           </div>
         </div>
@@ -67,7 +67,7 @@
           <label>就餐人数</label>
           <input placeholder="请输入人数" id="mealsNumbel_Input"/>
           <label>服务员</label>
-          <input placeholder="001服务员" readonly/>
+          <input placeholder="001服务员" readonly id="employeeId_select" value="001"/>
           <!--<select id="employeeId_select">-->
           <!--<option value="" disabled selected>请选择服务员</option>-->
           <!--<option value="001">001</option>-->
@@ -102,16 +102,23 @@
 
     created(){
       let getData = {
-        'mer': '1',
-        'sho': '66'
+        mer: '1',
+        sho: '66'
       }
-      //./static/respons.json
-      axios.get('../static/respons.json').then((res) => {
+      //http://113.105.152.179:8088/food ../static/respons.json
+      axios.get('http://113.105.152.179:8088/food',
+        {
+          params: {
+            mer: '1',
+            sho: '66'
+          }
+        }
+      ).then((res) => {
 //        console.log(res);
         this.merchanData = res.data;
         this.shopname = res.data.shopname;
         this.lists = res.data.table;
-        this.rooms = res.data.table[1].shopTableList;
+        this.rooms = res.data.table[0].shopTableList;
       })
 //      this.rooms=lists[0].rooms
     },
@@ -139,14 +146,14 @@
           '/room', 'Room'
         );
         document.getElementById("roomopendiv").setAttribute("class", "no_display_room");
-//        var employeeId_select = document.getElementById("employeeId_select");
-//        var employeeId = employeeId_select.value;
-//        var mealsNumbel_Input = document.getElementById("mealsNumbel_Input");
-//        var mealsNumbel = mealsNumbel_Input.value;
-//        this.requestData.employeeId = employeeId;
-//        this.requestData.mealsNumbel = mealsNumbel;
+        var employeeId_select = document.getElementById("employeeId_select");
+        var employeeId = employeeId_select.value;
+        var mealsNumbel_Input = document.getElementById("mealsNumbel_Input");
+        var mealsNumbel = mealsNumbel_Input.value;
+        this.requestData.employeeId = employeeId;
+        this.requestData.mealsNumbel = mealsNumbel;
         window.localStorage.setItem("AllData", JSON.stringify(this.merchanData));
-//        console.log(window.localStorage);
+        console.log(window.localStorage);
         //alert(employeeId+mealsNumbel);
 
 //        var menu_div = document.getElementById("menu_div");

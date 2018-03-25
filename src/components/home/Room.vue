@@ -1,7 +1,7 @@
 <template>
   <div class="container" id="menu_div">
     <div class="topbar_room">
-      <span @click="goback()">&lt;</span>
+      <span @click="goback()"><img src="../../assets/back.png"/></span>
       {{tableName}}
     </div>
     <div class="titlebar_room">
@@ -119,7 +119,7 @@
         </p>
         <div class="taste_item_div" id="taste_item_div">
           <label class="ladu_label" v-for="taste_item in tasteEntity">
-            <input type="checkbox" name="taste" :value=taste_item.id />{{taste_item.taste}}</label>
+            <input type="checkbox" name="taste" :value="taste_item.id"/>{{taste_item.taste}}</label>
         </div>
         <div class="taste_btn_div">
           <span @click="onSelectTaste()">确定</span>
@@ -176,6 +176,12 @@
       _this.menus = _this.goods[_this.num].foods;
       _this.shopName = JSON.parse(window.localStorage.getItem("AllData")).shopname;
       _this.tableName = window.localStorage.getItem("tableName");
+//      if (JSON.parse(window.localStorage.getItem("menus")).length != 0) {
+//        _this.menus = JSON.parse(window.localStorage.getItem("menus"));
+//      }
+//      if (JSON.parse(window.localStorage.getItem("downMenu")).length != 0) {
+//        _this.menuItem = JSON.parse(window.localStorage.getItem("downMenu"));
+//      }
 //      if (_this.tableName != window.localStorage.getItem("tableName")) {
 //        _this.tableName = window.localStorage.getItem("tableName");
 //      }
@@ -208,6 +214,7 @@
       });
       window.localStorage.removeItem("downMenu");
       window.localStorage.setItem("downMenu", JSON.stringify(_this.menuItem));
+      window.localStorage.setItem("menus", JSON.stringify(_this.menus));
     },
 
 //    destroyed(){

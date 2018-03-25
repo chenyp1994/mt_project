@@ -1,7 +1,7 @@
 <template>
   <div class="pay_container">
     <div class="top_first">
-      <span @click="goback()">&lt;</span>下单
+      <span @click="goback()"><img src="../../assets/back.png"/></span>下单
     </div>
     <div class="shopname_div">
       <span><img src="../../assets/shop_color.png"/></span>{{shopName}}
@@ -82,7 +82,9 @@
           "orderInfo": {
             "shopId": "", "tableId": "", "mealsNumbel": "", "employeeId": "", "orderItem": JSON.stringify(order)
           }
-        }
+        };
+        window.localStorage.clear();
+        console.log(window.localStorage);
       }
     }
 //    mounted(){
@@ -116,7 +118,12 @@
     display: inline-block;
     height: inherit;
     font-size: 1em;
-    padding: 0em 0.625em;
+    padding: 0.3125em;
+    margin: 0em 0.625em 0em 0em;
+  }
+
+  .top_first span img{
+    vertical-align: middle;
   }
 
   .shopname_div, .tablename_div {
@@ -134,6 +141,10 @@
     margin: 0em 0.625em 0em 0em;
     /*background: #000000;*/
     display: inline-block;
+  }
+
+  .shopname_div span img{
+    vertical-align: middle;
   }
 
   .menu_div {
