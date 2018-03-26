@@ -29,8 +29,10 @@
               <span @click="onChooseNorms(item,$event)" class="norms_span"
                     v-if="item.foodtasetEntity.length!=0">选规格</span>
               <span v-else="" class="food_nums_count_span">
-                <span @click="onReduceFoodItem(item)"><img src="../../assets/minus.png"/></span>
+                <span @click="onReduceFoodItem(item)"><img
+                  src="../../assets/minus.png"/></span>
                 {{item.num}}
+
                 <span @click="onAddFoodItem(item)"><img src="../../assets/plus.png"/></span>
               </span>
             </p>
@@ -136,7 +138,7 @@
     data(){
       return {
         lists: [],
-        num: 1,
+        num: 0,
         shopName: null,
         tableName: null,
         goods: [],
@@ -176,12 +178,17 @@
       _this.menus = _this.goods[_this.num].foods;
       _this.shopName = JSON.parse(window.localStorage.getItem("AllData")).shopname;
       _this.tableName = window.localStorage.getItem("tableName");
-//      if (JSON.parse(window.localStorage.getItem("menus")).length != 0) {
-//        _this.menus = JSON.parse(window.localStorage.getItem("menus"));
-//      }
-//      if (JSON.parse(window.localStorage.getItem("downMenu")).length != 0) {
-//        _this.menuItem = JSON.parse(window.localStorage.getItem("downMenu"));
-//      }
+      if (window.localStorage.length > 2) {
+        if (JSON.parse(window.localStorage.getItem("menus")).length != 0) {
+          _this.menus = JSON.parse(window.localStorage.getItem("menus"));
+        }
+        if (JSON.parse(window.localStorage.getItem("downMenu")).length != 0) {
+          _this.menuItem = JSON.parse(window.localStorage.getItem("downMenu"));
+        }
+        _this.totalPrice = JSON.parse(window.localStorage.getItem("totalPrice"));
+        _this.foodNums = window.localStorage.getItem("menusNum");
+      }
+//
 //      if (_this.tableName != window.localStorage.getItem("tableName")) {
 //        _this.tableName = window.localStorage.getItem("tableName");
 //      }
@@ -200,7 +207,8 @@
       });
     },
 
-    beforeDestroy (){
+    beforeDestroy()
+    {
       var _this = this;
       var shopInfo = new Object();
       shopInfo.shopName = _this.shopName;
@@ -213,9 +221,15 @@
         data: _this.menuItem
       });
       window.localStorage.removeItem("downMenu");
-      window.localStorage.setItem("downMenu", JSON.stringify(_this.menuItem));
-      window.localStorage.setItem("menus", JSON.stringify(_this.menus));
-    },
+      window.localStorage.setItem("downMenu", JSON.stringify(_this.menuItem));//菜单
+      window.localStorage.removeItem("menus");
+      window.localStorage.setItem("menus", JSON.stringify(_this.menus));//选择过的完整菜单
+      window.localStorage.removeItem("menusNum");
+      window.localStorage.setItem("menusNum", _this.foodNums);//菜单数量
+      window.localStorage.removeItem("totalPrice");
+      window.localStorage.setItem("totalPrice", JSON.stringify(_this.totalPrice));
+    }
+    ,
 
 //    destroyed(){
 //      eventBus.$emit("PayAttrDeliver", {tableName:this.tableName,shopName:this.shopName,data: this.menuItem});
@@ -230,15 +244,18 @@
 //          _this.menus[i].num = 0;
 //        }
         console.log(this.menus);
-      },
+      }
+      ,
       onChooseNorms: function (food, event) {
         document.getElementById("food_norms").setAttribute("class", "dis_foodNormsDiv");
         this.food_info = food;
 //        console.log(food);
-      },
+      }
+      ,
       onCloseRoom: function () {
         document.getElementById("food_norms").setAttribute("class", "nodis_foodNormsDiv");
-      },
+      }
+      ,
 
       //规格窗口里的加入购物车的方法
       onAddFood: function (food_info) {
@@ -250,7 +267,8 @@
         this.menuItem.push(menuitem);
         console.log(this.menuItem);
         document.getElementById("food_norms").setAttribute("class", "nodis_foodNormsDiv");
-      },
+      }
+      ,
       //点击选规格按钮后的加号按钮方法
       onAddFoodItem: function (fooditem) {
         this.foodNums++;
@@ -274,18 +292,20 @@
       },
 
       onReduceFoodItem: function (food_info) {
-        console.log(this.menus);
-        if (food_info.num == 0) {
+        var _this = this;
+        console.log(_this.menus);
+        if (food_info.num == 0 || food_info.num < 0) {
           return;
         } else {
-          var isSameID = this.menus.findIndex(x => x.id == food_info.id);
-          var shopItemId = this.menuItem.findIndex(x => x.id == food_info.id);
-          this.totalPrice -= food_info.cost;
+          var isSameID = _this.menus.findIndex(x => x.id == food_info.id);
+          var shopItemId = _this.menuItem.findIndex(x => x.id == food_info.id);
+          console.log(isSameID, shopItemId);
+          _this.totalPrice -= food_info.cost;
           if (isSameID != -1) {
-            this.foodNums--;
-            this.menus[isSameID].num--;
-            if (this.menuItem[shopItemId].num == 0) {
-              this.menuItem.splice(shopItemId, 1);
+            _this.foodNums--;
+            _this.menus[isSameID].num--;
+            if (_this.menuItem[shopItemId].num == 0) {
+              _this.menuItem.splice(shopItemId, 1);
             } else {
               return;
             }
@@ -295,7 +315,6 @@
           }
         }
 
-        console.log(this.menuItem);
       },
 
       onDisplayShop: function (isShop) {
@@ -304,13 +323,15 @@
         document.getElementById("shopItem").setAttribute("class", shopcls);
         document.getElementById("shop_carts").setAttribute("class", height);
         this.isShop = !isShop;
-      },
+      }
+      ,
       //显示菜品口味，多选
       onShowNorms: function (food_info) {
         this.tasteEntity = food_info.foodtasetEntity;
         this.isShowNorm = true;
         console.log(food_info);
-      },
+      }
+      ,
 
       //清空购物车
       onClearShop: function () {
@@ -324,12 +345,14 @@
         }
         this.foodNums = 0;
         this.totalPrice = 0;
-      },
+      }
+      ,
 
       //关闭口味选择窗口
       onCloseTasteDiv: function () {
         this.isShowNorm = false;
-      },
+      }
+      ,
 
       //选择口味操作
       onSelectTaste: function () {
@@ -345,7 +368,8 @@
         console.log(tasteList, taste);
         this.isShowNorm = false;
         this.selectedTaste = taste;
-      },
+      }
+      ,
       onRedirectToPay: function () {
         this.$router.push(
           '/pay', 'Pay'

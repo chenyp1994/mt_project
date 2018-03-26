@@ -106,13 +106,13 @@
         sho: '66'
       }
       //http://113.105.152.179:8088/food ../static/respons.json
-      axios.get('http://113.105.152.179:8088/food',
-        {
-          params: {
-            mer: '1',
-            sho: '66'
-          }
-        }
+      axios.get('./static/respons.json',
+//        {
+//          params: {
+//            mer: '1',
+//            sho: '66'
+//          }
+//        }
       ).then((res) => {
 //        console.log(res);
         this.merchanData = res.data;
@@ -142,6 +142,7 @@
         document.getElementById("roomopendiv").setAttribute("class", "no_display_room")
       },
       onOpenDesk: function (event) {
+        console.log(event);
         this.$router.push(
           '/room', 'Room'
         );
@@ -153,7 +154,7 @@
         this.requestData.employeeId = employeeId;
         this.requestData.mealsNumbel = mealsNumbel;
         window.localStorage.setItem("AllData", JSON.stringify(this.merchanData));
-        console.log(window.localStorage);
+//        console.log(window.localStorage);
         //alert(employeeId+mealsNumbel);
 
 //        var menu_div = document.getElementById("menu_div");

@@ -127,6 +127,7 @@
   float: right;
   display: flex;
   align-items: center;
+  margin-right: 0.625em;
   color: #666666;
 }
 
@@ -295,6 +296,7 @@
 .ladu_label input[type="checkbox"]:checked {
   -webkit-appearance: none;
   border-color: #e67500;
+  background: rgba(255,255,255,0);
 }
 
 .food_center_normInfo, .food_center_laduInfo {
