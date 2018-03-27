@@ -139,7 +139,6 @@
 .category_list {
   list-style: none;
   width: 100%;
-  overflow: scroll;
   -webkit-overflow-scrolling: touch;
   margin: 0em;
   float: left;

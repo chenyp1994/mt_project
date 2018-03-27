@@ -29,9 +29,9 @@
               <span @click="onChooseNorms(item,$event)" class="norms_span"
                     v-if="item.foodtasetEntity.length!=0">选规格</span>
               <span v-else="" class="food_nums_count_span">
-                <span @click="onReduceFoodItem(item)"><img
+                <span @click="onReduceFoodItem(item)" v-show="item.num"><img
                   src="../../assets/minus.png"/></span>
-                {{item.num}}
+                <span v-show="item.num">{{item.num}}</span>
 
                 <span @click="onAddFoodItem(item)"><img src="../../assets/plus.png"/></span>
               </span>
@@ -87,8 +87,8 @@
       </div>
     </div>
     <div class="shop_carts autoheight" id="shop_carts">
-      <div id="shopItem" class="no_display_shop" @click="onDisplayShop(isShop,$event)">
-        <div class="shopItemDetail">
+      <div id="shopItem" class="no_display_shop">
+        <div class="shopItemDetail" @click="onDisplayShop(isShop,$event)">
           <p><span class="shop_name_span">购物车</span><span class="clear_span" @click="onClearShop()"><img
             src="../../assets/clear.png"/>清空</span></p>
           <ul>
@@ -159,32 +159,20 @@
 
     },
     created(){
-      let getData = {
-        'mer': '1',
-        'sho': '66'
-      };
-//      axios.get('../../../static/respons.json').then((res) => {
-//      axios.get('../static/data.json').then((res) => {
-//        this.goods = res.data.goods;
-//      });
-//        console.log(res);
-//        this.merchanData = res.data;
-//        this.shopname = res.data.shopname;
-//        this.lists = res.data.table;
-//        this.rooms = res.data.table[1].shopTableList;
-//      });
       var _this = this;
       _this.goods = JSON.parse(window.localStorage.getItem("AllData")).goods;
+      for (var m = 0; m < _this.goods.length; m++) {
+        for (var i = 0; i < _this.goods[m].foods.length; i++) {
+          _this.goods[m].foods[i].num = 0;
+        }
+      }
       _this.menus = _this.goods[_this.num].foods;
       _this.shopName = JSON.parse(window.localStorage.getItem("AllData")).shopname;
       _this.tableName = window.localStorage.getItem("tableName");
+      console.log(window.localStorage);
       if (window.localStorage.length > 2) {
-        if (JSON.parse(window.localStorage.getItem("menus")).length != 0) {
-          _this.menus = JSON.parse(window.localStorage.getItem("menus"));
-        }
-        if (JSON.parse(window.localStorage.getItem("downMenu")).length != 0) {
-          _this.menuItem = JSON.parse(window.localStorage.getItem("downMenu"));
-        }
+        _this.menus = JSON.parse(window.localStorage.getItem("menus"));
+        _this.menuItem = JSON.parse(window.localStorage.getItem("downMenu"));
         _this.totalPrice = JSON.parse(window.localStorage.getItem("totalPrice"));
         _this.foodNums = window.localStorage.getItem("menusNum");
       }
@@ -195,11 +183,7 @@
 //      if (_this.menuItem != window.localStorage.getItem("downMenu")) {
 //        _this.menuItem = window.localStorage.getItem("downMenu");
 //      }
-      for (var m = 0; m < _this.goods.length; m++) {
-        for (var i = 0; i < _this.goods[m].foods.length; i++) {
-          _this.goods[m].foods[i].num = 0;
-        }
-      }
+
       eventBus.$on("AttrDeliver", function (val) {
         _this.tableName = val.tableName;
         window.localStorage.removeItem("tableName");
@@ -228,8 +212,7 @@
       window.localStorage.setItem("menusNum", _this.foodNums);//菜单数量
       window.localStorage.removeItem("totalPrice");
       window.localStorage.setItem("totalPrice", JSON.stringify(_this.totalPrice));
-    }
-    ,
+    },
 
 //    destroyed(){
 //      eventBus.$emit("PayAttrDeliver", {tableName:this.tableName,shopName:this.shopName,data: this.menuItem});
@@ -244,18 +227,15 @@
 //          _this.menus[i].num = 0;
 //        }
         console.log(this.menus);
-      }
-      ,
+      },
       onChooseNorms: function (food, event) {
         document.getElementById("food_norms").setAttribute("class", "dis_foodNormsDiv");
         this.food_info = food;
 //        console.log(food);
-      }
-      ,
+      },
       onCloseRoom: function () {
         document.getElementById("food_norms").setAttribute("class", "nodis_foodNormsDiv");
-      }
-      ,
+      },
 
       //规格窗口里的加入购物车的方法
       onAddFood: function (food_info) {
@@ -265,7 +245,7 @@
         var menuitem;
         menuitem = JSON.parse(JSON.stringify(food_info));
         this.menuItem.push(menuitem);
-        console.log(this.menuItem);
+//        console.log(this.menuItem);
         document.getElementById("food_norms").setAttribute("class", "nodis_foodNormsDiv");
       }
       ,
@@ -293,45 +273,37 @@
 
       onReduceFoodItem: function (food_info) {
         var _this = this;
-        console.log(_this.menus);
-        if (food_info.num == 0 || food_info.num < 0) {
-          return;
-        } else {
-          var isSameID = _this.menus.findIndex(x => x.id == food_info.id);
-          var shopItemId = _this.menuItem.findIndex(x => x.id == food_info.id);
-          console.log(isSameID, shopItemId);
-          _this.totalPrice -= food_info.cost;
-          if (isSameID != -1) {
-            _this.foodNums--;
-            _this.menus[isSameID].num--;
-            if (_this.menuItem[shopItemId].num == 0) {
-              _this.menuItem.splice(shopItemId, 1);
-            } else {
-              return;
-            }
-          }
-          else {
-            return;
-          }
+        food_info.num--;
+        console.log(food_info.num, 1);
+        var isSameID = _this.menus.findIndex(x => x.id == food_info.id);
+        var shopItemId = _this.menuItem.findIndex(x => x.id == food_info.id);
+        _this.menuItem[shopItemId].num = food_info.num;
+        _this.menus[isSameID].num = food_info.num;
+        console.log(shopItemId, food_info.num, 2);
+//        _this.menuItem[shopItemId].num--;
+        if (_this.menuItem[shopItemId].num == 0) {
+          _this.menuItem.splice(shopItemId, 1);
+          console.log(food_info.num, 3);
         }
-
+        console.log(food_info.num, 4);
+        _this.totalPrice -= food_info.cost;
+        _this.foodNums--;
+        console.log(food_info.num, 5);
+//        _this.menus[isSameID].num--;
       },
-
-      onDisplayShop: function (isShop) {
+      onDisplayShop: function (isShop, e) {
         var shopcls = isShop ? "display_shop" : "no_display_shop";
         var height = isShop ? "fullheight" : "autoheight";
         document.getElementById("shopItem").setAttribute("class", shopcls);
         document.getElementById("shop_carts").setAttribute("class", height);
         this.isShop = !isShop;
-      }
-      ,
+      },
       //显示菜品口味，多选
       onShowNorms: function (food_info) {
         this.tasteEntity = food_info.foodtasetEntity;
         this.isShowNorm = true;
         console.log(food_info);
-      }
-      ,
+      },
 
       //清空购物车
       onClearShop: function () {
@@ -345,14 +317,12 @@
         }
         this.foodNums = 0;
         this.totalPrice = 0;
-      }
-      ,
+      },
 
       //关闭口味选择窗口
       onCloseTasteDiv: function () {
         this.isShowNorm = false;
-      }
-      ,
+      },
 
       //选择口味操作
       onSelectTaste: function () {
@@ -368,14 +338,13 @@
         console.log(tasteList, taste);
         this.isShowNorm = false;
         this.selectedTaste = taste;
-      }
-      ,
+      },
       onRedirectToPay: function () {
         this.$router.push(
           '/pay', 'Pay'
         );
       }
-    }
+    },
   }
 </script>
 <style scoped>
