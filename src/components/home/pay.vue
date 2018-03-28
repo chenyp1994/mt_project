@@ -28,8 +28,8 @@
       <div class="result_div" v-if="">
         <span class="result_first_span">合计</span><span class="total_money_span">&yen;{{totalPrice}}</span>
         <span class="signin_span" @click="onDownOrder()"
-        v-if="payornot">提交订单</span>
-        <span v-else="">
+              v-if="payornot">提交订单</span>
+        <span v-else="" class="pay_span" @click="onGetOpenWapPay()">
           结算
         </span>
       </div>
@@ -48,7 +48,7 @@
         shopName: null,
         menus: [],
         totalPrice: 0,
-        payornot:true
+        payornot: true
       }
     },
     created(){
@@ -68,23 +68,82 @@
         history.go(-1)
       },
       onDownOrder: function () {
+        this.payornot = false;
         var order = [];
         for (var i = 0; i < this.menus.length; i++) {
           var orderItem = new Object();
-          orderItem.foodId = "";
-          orderItem.foodName = "";
-          orderItem.qty = "";
-          orderItem.price = "";
+          orderItem.foodId = this.menus[i].id;
+          orderItem.foodName = this.menus[i].name;
+          orderItem.qty = this.menus[i].num;
+          orderItem.price = this.menus[i].cost;
           order.push(orderItem);
         }
         ;
+        //做随机的orderId，保证唯一性
+        var myDate = new Date();
+        var year = myDate.getFullYear();//获取完整的年份(4位,1970-????)
+        var month = myDate.getMonth() + 1;
+        var date = myDate.getDate();
+        var hours = myDate.getHours();
+        var minutes = myDate.getMinutes();
+        var seconds = myDate.getSeconds();
+        var random = Math.floor(Math.random() * (900) + 100);
+        var nowDate = year + (month < 10 ? "0" + month : month) + (date < 10 ? "0" + date : date) + (hours < 10 ? "0" + hours : hours)
+          + (minutes < 10 ? "0" + minutes : minutes) + (seconds < 10 ? "0" + seconds : seconds) + random;
+        console.log(year, month, date, hours, minutes, seconds, random, nowDate);
+        //var memus = JSON.parse(window.localStorage.getItem("downMenu"));
         let requestData = {
           "orderInfo": {
-            "shopId": "", "tableId": "", "mealsNumbel": "", "employeeId": "", "orderItem": JSON.stringify(order)
+            "orderId": nowDate,
+            "shopId": window.localStorage.getItem("ShopId"),
+            "tableId": JSON.parse(window.localStorage.getItem("requestData")).tableId.toString(),
+            "mealsNumbel": JSON.parse(window.localStorage.getItem("requestData")).mealsNumbel,
+            "employeeId": JSON.parse(window.localStorage.getItem("requestData")).employeeId,
+            "orderItem": order
           }
         };
+        axios.post("/downOrder", {params: requestData}, {
+          headers: {'Content-Type': 'application/json'}
+        })
+          .then(function (res) {
+            console.log(res);
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
+        console.log(requestData);
+        //window.localStorage.clear();
+//        console.log(memus);memus
+      },
+      //支付请求
+      onGetOpenWapPay: function () {
+        var myDate = new Date();
+        var year = myDate.getFullYear();//获取完整的年份(4位,1970-????)
+        var month = myDate.getMonth() + 1;
+        var date = myDate.getDate();
+        var hours = myDate.getHours();
+        var minutes = myDate.getMinutes();
+        var seconds = myDate.getSeconds();
+        var random = Math.floor(Math.random() * (900) + 100);
+        var nowDate = year + (month < 10 ? "0" + month : month) + (date < 10 ? "0" + date : date) + (hours < 10 ? "0" + hours : hours)
+          + (minutes < 10 ? "0" + minutes : minutes) + (seconds < 10 ? "0" + seconds : seconds) + random;
+        let requestData = {
+          id: 12,
+          totalFee: this.totalPrice * 100,//以分为单位
+          orderId: nowDate
+        }
+        axios.get("/saobei/getOpenWapPay", {
+          params: requestData
+        }, {
+          headers: {'Content-Type': 'application/json'}
+        })
+          .then(function (res) {
+            console.log(res);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
         window.localStorage.clear();
-        console.log(window.localStorage);
       }
     }
 //    mounted(){
@@ -122,7 +181,7 @@
     margin: 0em 0.625em 0em 0em;
   }
 
-  .top_first span img{
+  .top_first span img {
     vertical-align: middle;
   }
 
@@ -143,7 +202,7 @@
     display: inline-block;
   }
 
-  .shopname_div span img{
+  .shopname_div span img {
     vertical-align: middle;
   }
 
@@ -207,7 +266,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    border-top: 1px solid rgba(0,0,0,.1);
+    border-top: 1px solid rgba(0, 0, 0, .1);
   }
 
   .remark_div {
@@ -227,6 +286,17 @@
     background: #F3712D;
     font-size: 0.875em;
     padding: 1em;
+    text-align: center;
+    width: 20%;
+  }
+
+  .pay_span {
+    color: #ffffff;
+    background: #62A72A;
+    font-size: 0.875em;
+    padding: 1em;
+    width: 20%;
+    text-align: center;
   }
 
   .result_first_span {

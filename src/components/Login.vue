@@ -44,6 +44,18 @@
       return {
         msg: 'Welcome to Your Vue.js App'
       }
+    },
+
+    created(){
+        const ShopId = 66;
+        window.localStorage.setItem("ShopId",ShopId);
+        if(ShopId){
+            this.$router.push(
+              '/home', 'Home'
+            )
+        }else {
+            return;
+        }
     }
   }
 </script>

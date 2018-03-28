@@ -108,11 +108,11 @@
       //http://113.105.152.179:8088/food ../static/respons.json
       axios.get('./static/respons.json',
 //        {
-//        params: {
-//          mer: '1',
+//          params: {
+//            mer: '1',
 //            sho: '66'
+//          }
 //        }
-//      }
       ).then((res) => {
 //        console.log(res);
         this.merchanData = res.data;
@@ -153,7 +153,10 @@
         var mealsNumbel = mealsNumbel_Input.value;
         this.requestData.employeeId = employeeId;
         this.requestData.mealsNumbel = mealsNumbel;
+        this.requestData.tableId = this.openRoom.id;
+        window.localStorage.setItem("requestData", JSON.stringify(this.requestData));
         window.localStorage.setItem("AllData", JSON.stringify(this.merchanData));
+        console.log(this.openRoom);//
 //        console.log(window.localStorage);
         //alert(employeeId+mealsNumbel);
 

@@ -170,7 +170,7 @@
       _this.shopName = JSON.parse(window.localStorage.getItem("AllData")).shopname;
       _this.tableName = window.localStorage.getItem("tableName");
       console.log(window.localStorage);
-      if (window.localStorage.length > 2) {
+      if (window.localStorage.length > 4) {
         _this.menus = JSON.parse(window.localStorage.getItem("menus"));
         _this.menuItem = JSON.parse(window.localStorage.getItem("downMenu"));
         _this.totalPrice = JSON.parse(window.localStorage.getItem("totalPrice"));
