@@ -4,10 +4,10 @@
       <span @click="goback()"><img src="../../assets/back.png"/></span>
       {{tableName}}
     </div>
-    <div class="titlebar_room">
-      <span><img src="../../assets/shop_color.png"/></span>
-      <p>{{shopName}}</p>
-    </div>
+    <!--<div class="titlebar_room">-->
+    <!--<span><img src="../../assets/shop_color.png"/></span>-->
+    <!--<p>{{shopName}}</p>-->
+    <!--</div>-->
     <div class="maindiv">
       <div class="navdiv">
         <ul class="category_list">
@@ -27,7 +27,7 @@
           <div class=food_item_div><span class="food_name_span">{{item.name}}</span>
             <p class="money_p">&yen;&nbsp;{{item.cost}}
               <span @click="onChooseNorms(item,$event)" class="norms_span"
-                    v-if="item.foodtasetEntity.length!=0">选规格</span>
+                    v-if="item.foodtasetEntity.length!=0 ||item.foodsize.length!=0">选规格</span>
               <span v-else="" class="food_nums_count_span">
                 <span @click="onReduceFoodItem(item)" v-show="item.num"><img
                   src="../../assets/minus.png"/></span>
@@ -56,15 +56,23 @@
           <p>{{food_info.name}}<span @mouseover="onCloseRoom()">
           <img src="../../assets/close_icon.png"></span></p>
         </div>
-        <div class="food_center_normInfo">
+        <div class="taste_item_div" id="size_item_div">
           <p class="norms_la">规格</p>
-          <ul>
-            <li class="norm_span">小份</li>
-            <li class="norm_span">中份</li>
-            <li class="norm_span">大份</li>
-          </ul>
-          <!--<p><span class="norm_span">小份</span><span class="norm_span">中份</span><span class="norm_span">大份</span></p>-->
+          <label class="ladu_label" v-for="size_item in food_info.foodsize">
+            <input type="checkbox" name="size" :value="size_item.size"/>{{size_item.size}}</label>
         </div>
+        <!--<div class="food_center_normInfo">-->
+        <!--<label>-->
+        <!--<input type="checkbox"/>-->
+        <!--</label>-->
+        <!--<p class="norms_la">规格</p>-->
+        <!--<ul>-->
+        <!--<li class="norm_span">小份</li>-->
+        <!--<li class="norm_span">中份</li>-->
+        <!--<li class="norm_span">大份</li>-->
+        <!--</ul>-->
+        <!--&lt;!&ndash;<p><span class="norm_span">小份</span><span class="norm_span">中份</span><span class="norm_span">大份</span></p>&ndash;&gt;-->
+        <!--</div>-->
         <div class="food_center_laduInfo">
           <!--<p>辣度</p>-->
           <!--<label class="ladu_label"><input type="radio"/>微辣</label>-->
@@ -81,7 +89,7 @@
         <div class="food_center_price">
           <span class="trueprice_span">&yen;{{food_info.cost}}</span>
           <span class="oriprice_span">&yen;{{food_info.retailPrice}}</span><span class="ladu_span">（微辣）</span>
-          <span class="food_center_shopcart_span" @click="onAddFoodItem(food_info)">
+          <span class="food_center_shopcart_span" @click="onAddFood(food_info)">
             <img src="../../assets/shopcart_s.png"/>加入购物车</span>
         </div>
       </div>
@@ -98,7 +106,7 @@
               <span class="shopcart_count_span">
                 <span @click="onReduceFoodItem(item)"><img src="../../assets/minus.png"/></span>
                 {{item.num}}
-                <span @click="onAddFoodItem(item)"><img src="../../assets/plus.png"/></span>
+                <span @click="onAddFoodItem(item,$event)"><img src="../../assets/plus.png"/></span>
               </span>
             </li>
           </ul>
@@ -121,7 +129,7 @@
         </p>
         <div class="taste_item_div" id="taste_item_div">
           <label class="ladu_label" v-for="taste_item in tasteEntity">
-            <input type="checkbox" name="taste" :value="taste_item.id"/>{{taste_item.taste}}</label>
+            <input type="checkbox" name="taste" :value="taste_item.value"/>{{taste_item.taste}}</label>
         </div>
         <div class="taste_btn_div">
           <span @click="onSelectTaste()">确定</span>
@@ -150,6 +158,7 @@
         menuItem: new Array(),//购物车里的菜单
         isShowNorm: false,
         tasteEntity: [],
+        foodsize: [],
         selectedTaste: [],
         totalPrice: 0
       }
@@ -166,7 +175,7 @@
           _this.goods[m].foods[i].num = 0;
         }
       }
-      _this.menus = _this.goods[_this.num].foods;
+      _this.menus = _this.goods[0].foods;
       _this.shopName = JSON.parse(window.localStorage.getItem("AllData")).shopname;
       _this.tableName = window.localStorage.getItem("tableName");
       console.log(window.localStorage);
@@ -239,12 +248,52 @@
 
       //规格窗口里的加入购物车的方法
       onAddFood: function (food_info) {
+        food_info.remark = "";
+        if (food_info.foodtasetEntity.length != 0 || food_info.foodtasetEntity.length != 0) {
+          var sizeCheckbox = document.getElementsByName("size");
+//          var tasteCheckbox = document.getElementsByName("taste");
+          for (var i = 0; i < sizeCheckbox.length; i++) {
+            if (sizeCheckbox[i].checked) {
+              food_info.remark = sizeCheckbox[i].value;
+            } else {
+              continue;
+            }
+          }
+//          for (var i = 0; i < tasteCheckbox.length; i++) {
+//            if (tasteCheckbox[i].checked) {
+//              if (food_info.remark == "") {
+//                food_info.remark += tasteCheckbox[i].value;
+//              } else {
+//                food_info.remark = "," + tasteCheckbox[i].value;
+//              }
+//            } else {
+//              continue;
+//            }
+//          }
+//          ;
+        }
+        console.log(food_info);
+//        if (food_info.foodsize.length != 0) {
+//          var remark = document.getElementById("remark").value;
+//          fooditem.remark = remark
+//        }
         this.foodNums++;
-        food_info.num++;
         this.totalPrice += food_info.cost;
-        var menuitem;
-        menuitem = JSON.parse(JSON.stringify(food_info));
-        this.menuItem.push(menuitem);
+        //找口味一样的菜单
+        var isSameid = this.menuItem.findIndex(x => x.id == food_info.id);
+        var isSameTaste;
+        if (isSameid == -1) {
+          food_info.num++;
+          this.menuItem.push(food_info);
+        } else {
+          if (food_info.remark === this.menuItem[isSameid].remark) {
+            this.menuItem[isSameid].num++;
+          } else {
+            food_info.num++;
+            this.menuItem.push(food_info);
+          }
+
+        }
 //        console.log(this.menuItem);
         document.getElementById("food_norms").setAttribute("class", "nodis_foodNormsDiv");
       }
@@ -301,6 +350,7 @@
       //显示菜品口味，多选
       onShowNorms: function (food_info) {
         this.tasteEntity = food_info.foodtasetEntity;
+        this.foodsize = food_info.foodsize;
         this.isShowNorm = true;
         console.log(food_info);
       },

@@ -1461,7 +1461,7 @@
       "foods": [
         {
           "foodtasetEntity": [{"id":0,"taste":"微辣"},{"id":1,"taste":"中辣"},{"id":1,"taste":"中辣"},{"id":1,"taste":"中辣"},{"id":1,"taste":"中辣"},{"id":1,"taste":"中辣"},{"id":1,"taste":"中辣"},{"id":1,"taste":"中辣"},{"id":1,"taste":"中辣"},{"id":1,"taste":"中辣"},{"id":1,"taste":"中辣"},{"id":1,"taste":"中辣"},{"id":1,"taste":"中辣"}],
-          "foodsize": [],
+          "foodsize": [{"id":0,"size":"大份"},{"id":0,"size":"小份"}],
           "categoryname": "6",
           "id": 3112,
           "merchantId": 1,

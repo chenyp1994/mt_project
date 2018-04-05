@@ -3,9 +3,9 @@
     <div class="top_first">
       <span @click="goback()"><img src="../../assets/back.png"/></span>下单
     </div>
-    <div class="shopname_div">
-      <span><img src="../../assets/shop_color.png"/></span>{{shopName}}
-    </div>
+    <!--<div class="shopname_div">-->
+    <!--<span><img src="../../assets/shop_color.png"/></span>{{shopName}}-->
+    <!--</div>-->
     <div class="tablename_div">{{tableName}}</div>
     <div class="menu_div">
       <ul>
@@ -23,7 +23,7 @@
     <div class="shopcart_div">
 
       <div class="remark_div">
-        <input type="text" placeholder="备注"/>
+        <input type="text" placeholder="备注" id="remark"/>
       </div>
       <div class="result_div" v-if="">
         <span class="result_first_span">合计</span><span class="total_money_span">&yen;{{totalPrice}}</span>
@@ -76,6 +76,7 @@
           orderItem.foodName = this.menus[i].name;
           orderItem.qty = this.menus[i].num;
           orderItem.price = this.menus[i].cost;
+          orderItem.remark = this.menus[i].remark;
           order.push(orderItem);
         }
         ;
@@ -92,25 +93,34 @@
           + (minutes < 10 ? "0" + minutes : minutes) + (seconds < 10 ? "0" + seconds : seconds) + random;
         console.log(year, month, date, hours, minutes, seconds, random, nowDate);
         //var memus = JSON.parse(window.localStorage.getItem("downMenu"));
+
+        var remark = document.getElementById("remark").value;
         let requestData = {
-          "orderInfo": {
-            "orderId": nowDate,
-            "shopId": window.localStorage.getItem("ShopId"),
-            "tableId": JSON.parse(window.localStorage.getItem("requestData")).tableId.toString(),
-            "mealsNumbel": JSON.parse(window.localStorage.getItem("requestData")).mealsNumbel,
-            "employeeId": JSON.parse(window.localStorage.getItem("requestData")).employeeId,
-            "orderItem": order
-          }
+          orderInfo: {
+            orderId: nowDate,
+            remark: remark,
+            shopId: window.localStorage.getItem("ShopId"),
+            tableId: JSON.parse(window.localStorage.getItem("requestData")).tableId.toString(),
+            mealsNumbel: JSON.parse(window.localStorage.getItem("requestData")).mealsNumbel,
+            employeeId: JSON.parse(window.localStorage.getItem("requestData")).employeeId,
+          },
+          orderItem: order,
         };
-        axios.post("/downOrder", {params: requestData}, {
-          headers: {'Content-Type': 'application/json'}
-        })
+        console.log(requestData);
+        var qs = require('qs');
+        axios.post(
+          "/downOrder",
+          qs.stringify({
+            "jsonData": JSON.stringify(requestData)
+          }),
+          {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
+        )
           .then(function (res) {
             console.log(res);
           })
           .catch(function (error) {
             console.log(error);
-          })
+          });
         console.log(requestData);
         //window.localStorage.clear();
 //        console.log(memus);memus
@@ -127,15 +137,14 @@
         var random = Math.floor(Math.random() * (900) + 100);
         var nowDate = year + (month < 10 ? "0" + month : month) + (date < 10 ? "0" + date : date) + (hours < 10 ? "0" + hours : hours)
           + (minutes < 10 ? "0" + minutes : minutes) + (seconds < 10 ? "0" + seconds : seconds) + random;
-        let requestData = {
-          id: 12,
-          totalFee: this.totalPrice * 100,//以分为单位
-          orderId: nowDate
-        }
+
         axios.get("/saobei/getOpenWapPay", {
-          params: requestData
-        }, {
-          headers: {'Content-Type': 'application/json'}
+          params: {
+            merchanId: 12,
+            shopId: window.localStorage.getItem("ShopId"),
+            totalFee: this.totalPrice * 100,//以分为单位
+            orderId: nowDate
+          }
         })
           .then(function (res) {
             console.log(res);

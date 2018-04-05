@@ -4,7 +4,7 @@
       <img src="../assets/logohdpi.png"/>
     </div>
     <!--<div class="tiptext">-->
-      <!--<p>{{msg}}</p>-->
+    <!--<p>{{msg}}</p>-->
     <!--</div>-->
     <div class="inputdiv">
         <span>
@@ -16,7 +16,7 @@
         <span>
           <img src="../assets/member.png"/>
         </span>
-      <input placeholder="登录名" type="text" id="username"/>
+      <input placeholder="手机号" type="text" id="username"/>
     </div>
     <div class="inputdiv">
       <span>
@@ -31,10 +31,30 @@
 
 </template>
 <script>
+  import axios from 'axios'
   export default{
     name: 'Login',
+    created(){
+      document.title = "登录";
+    },
     methods: {
       onLogin: function (event) {
+        var LoginData = new Object();
+        var mobile = document.getElementById("username").value;
+        var password = document.getElementById("password").value;
+        axios.post("/login",
+          {
+            mobile: mobile,
+            password: password
+          }, {
+            headers: {'Content-Type': 'application/json'}
+          })
+          .then(function (res) {
+            console.log(res);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
         this.$router.push(
           '/home', 'Home'
         )
@@ -47,15 +67,15 @@
     },
 
     created(){
-        const ShopId = 66;
-        window.localStorage.setItem("ShopId",ShopId);
-        if(ShopId){
-            this.$router.push(
-              '/home', 'Home'
-            )
-        }else {
-            return;
-        }
+      const ShopId = 66;
+      window.localStorage.setItem("ShopId", ShopId);
+//      if (ShopId) {
+//        this.$router.push(
+//          '/home', 'Home'
+//        )
+//      } else {
+//        return;
+//      }
     }
   }
 </script>

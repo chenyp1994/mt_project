@@ -5,10 +5,10 @@
       <!--<img src="../assets/goback.png"/>-->
       桌台状态
     </div>
-    <div id="titlebar_home">
-      <span><img src="../assets/shop_color.png"/></span>
-      <p>{{shopname}}</p>
-    </div>
+    <!--<div id="titlebar_home">-->
+    <!--<span><img src="../assets/shop_color.png"/></span>-->
+    <!--<p>{{shopname}}</p>-->
+    <!--</div>-->
     <div class="maindiv">
       <div class="navdiv">
         <ul>
@@ -119,6 +119,7 @@
         this.shopname = res.data.shopname;
         this.lists = res.data.table;
         this.rooms = res.data.table[0].shopTableList;
+        document.title = res.data.shopname;
       })
 //      this.rooms=lists[0].rooms
     },

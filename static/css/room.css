@@ -59,7 +59,8 @@
   width: 25%;
   float: left;
   height: 100%;
-  font-size: 0.75em;
+  font-size: 0.825em;
+  letter-spacing: 0.25em;
 }
 
 .mainmenu_div {
@@ -152,6 +153,8 @@
   /*text-align: center;*/
   display: flex;
   color: #263238;
+  font-family: PingFangSC-Regular;
+  font-weight: 700;
   border-bottom: 1px solid rgb(230, 230, 230);
   align-items: center;
   justify-content: center;
@@ -267,6 +270,8 @@
 
 .norms_la {
   font-size: 0.875em;
+  margin: 0em;
+  padding: 1em 0em 0em 1em;
 }
 
 .ladu_label input[type="checkbox"] {
@@ -288,7 +293,7 @@
   color: #ffffff;
   font-size: 0.825em;
   padding: 0.3125em 0.625em;
-  margin: 0.625em;
+  margin: 1em;
   border-radius: 3px;
 }
 
