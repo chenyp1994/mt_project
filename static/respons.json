@@ -29,7 +29,7 @@
           "prepareqty": null,
           "retailPrice": 1,
           "vipPrice": 1,
-          "avator": "blob:http://localhost:8080/39beec96-3f3d-4163-a082-dca859360245",
+          "avator": "http://192.168.1.222:8889/upload/4019a000-fbb7-4b1d-800d-f9cf52a7bce8____cai03.jpg",
           "foodId": 339,
           "createTime": 1515641602000,
           "updateTime": null
@@ -1484,7 +1484,7 @@
           "prepareqty": null,
           "retailPrice": 1,
           "vipPrice": 1,
-          "avator": "blob:http://localhost:8080/39beec96-3f3d-4163-a082-dca859360245",
+          "avator": "http://192.168.1.222:8889/upload/4019a000-fbb7-4b1d-800d-f9cf52a7bce8____cai03.jpg",
           "foodId": 339,
           "createTime": 1515641602000,
           "updateTime": null

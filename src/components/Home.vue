@@ -144,20 +144,28 @@
       },
       onOpenDesk: function (event) {
         console.log(event);
-        this.$router.push(
-          '/room', 'Room'
-        );
+
         document.getElementById("roomopendiv").setAttribute("class", "no_display_room");
         var employeeId_select = document.getElementById("employeeId_select");
         var employeeId = employeeId_select.value;
         var mealsNumbel_Input = document.getElementById("mealsNumbel_Input");
-        var mealsNumbel = mealsNumbel_Input.value;
-        this.requestData.employeeId = employeeId;
-        this.requestData.mealsNumbel = mealsNumbel;
-        this.requestData.tableId = this.openRoom.id;
-        window.localStorage.setItem("requestData", JSON.stringify(this.requestData));
-        window.localStorage.setItem("AllData", JSON.stringify(this.merchanData));
-        console.log(this.openRoom);//
+        var mealsNumbel = mealsNumbel_Input.value
+        if (mealsNumbel == null || mealsNumbel == "" || mealsNumbel == undefined) {
+          alert("请先输入就餐人数再进行点餐");
+          return false;
+        } else {
+          this.requestData.employeeId = employeeId;
+          this.requestData.mealsNumbel = mealsNumbel;
+          this.requestData.tableId = this.openRoom.id;
+          window.localStorage.setItem("requestData", JSON.stringify(this.requestData));
+          window.localStorage.setItem("AllData", JSON.stringify(this.merchanData));
+          console.log(this.openRoom);
+          this.$router.push(
+            '/room', 'Room'
+          );
+        }
+        ;
+        //
 //        console.log(window.localStorage);
         //alert(employeeId+mealsNumbel);
 

@@ -23,7 +23,7 @@
       </div>
       <div class="mainmenu_div">
         <div class="food_div" v-for="(item, index) in menus">
-          <div class="menuimg_div"><span></span></div>
+          <div class="menuimg_div"><span><img :src="item.avator"/></span></div>
           <div class=food_item_div><span class="food_name_span">{{item.name}}</span>
             <p class="money_p">&yen;&nbsp;{{item.cost}}
               <span @click="onChooseNorms(item,$event)" class="norms_span"
@@ -390,9 +390,13 @@
         this.selectedTaste = taste;
       },
       onRedirectToPay: function () {
-        this.$router.push(
-          '/pay', 'Pay'
-        );
+        if (this.menuItem.length == 0) {
+          alert("请先选择餐品再进行结算");
+        } else {
+          this.$router.push(
+            '/pay', 'Pay'
+          );
+        }
       }
     },
   }

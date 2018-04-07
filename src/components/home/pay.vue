@@ -116,7 +116,22 @@
           {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
         )
           .then(function (res) {
-            console.log(res);
+//              alert(res);
+//            axios.get("/saobei/getOpenWapPay", {
+//              params: {
+//                merchantId: 35,
+//                shopId: 72,//window.localStorage.getItem("ShopId"),
+//                totalFee: window.localStorage.getItem("totalPrice") * 100,//以分为单位
+//                orderId: nowDate
+//              }
+//            })
+//              .then(function (res) {
+//                  alert(res);
+////                  console.log(res);
+//              })
+//              .catch(function (error) {
+//                alert(error);
+//              });
           })
           .catch(function (error) {
             console.log(error);
@@ -137,21 +152,8 @@
         var random = Math.floor(Math.random() * (900) + 100);
         var nowDate = year + (month < 10 ? "0" + month : month) + (date < 10 ? "0" + date : date) + (hours < 10 ? "0" + hours : hours)
           + (minutes < 10 ? "0" + minutes : minutes) + (seconds < 10 ? "0" + seconds : seconds) + random;
-
-        axios.get("/saobei/getOpenWapPay", {
-          params: {
-            merchanId: 12,
-            shopId: window.localStorage.getItem("ShopId"),
-            totalFee: this.totalPrice * 100,//以分为单位
-            orderId: nowDate
-          }
-        })
-          .then(function (res) {
-            console.log(res);
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+        window.location.href = "/saobei/getOpenWapPay?&merchantId=35&shopId=72&totalFee=" + window.localStorage.getItem("totalPrice") * 100
+          + "&orderId=" + nowDate;
         window.localStorage.clear();
       }
     }
