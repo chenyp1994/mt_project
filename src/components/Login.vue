@@ -10,13 +10,13 @@
         <span>
           <img src="../assets/house.png"/>
         </span>
-      <input placeholder="MD11209" type="text" id="userid" readonly/>
+      <input placeholder="MD11209" type="text" id="mobile"/>
     </div>
     <div class="inputdiv">
         <span>
           <img src="../assets/member.png"/>
         </span>
-      <input placeholder="手机号" type="text" id="username"/>
+      <input placeholder="员工编号" type="text" id="code"/>
     </div>
     <div class="inputdiv">
       <span>
@@ -40,24 +40,43 @@
     methods: {
       onLogin: function (event) {
         var LoginData = new Object();
-        var mobile = document.getElementById("username").value;
+        var code = document.getElementById("code").value;
+        var mobile = document.getElementById("mobile").value;
         var password = document.getElementById("password").value;
+        if (code == "") {
+          alert("员工编号不能为空");
+          return;
+        }
+        if (mobile == "") {
+          alert("门店编号不能为空");
+          return;
+        }
+        if (password == "") {
+          alert("密码不能为空");
+          return;
+        }
+        ;
+        window.localStorage.setItem("merchantId", mobile);
+        var qs = require('qs');
+        var me = this;
         axios.post("/login",
-          {
+          qs.stringify({
+            code: code,
             mobile: mobile,
             password: password
-          }, {
-            headers: {'Content-Type': 'application/json'}
-          })
-          .then(function (res) {
-            console.log(res);
-          })
+          }),
+          {
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+          }).then(function (res) {
+          console.log(res);
+          me.$router.push(
+            '/home', 'Home'
+          )
+        })
           .catch(function (error) {
             console.log(error);
           });
-        this.$router.push(
-          '/home', 'Home'
-        )
+
       }
     },
     data () {
@@ -67,11 +86,13 @@
     },
 
     created(){
-      const ShopId = 66;
+      const mer = 32
+      const ShopId = 119;
+      const tab = 912;
       window.localStorage.setItem("ShopId", ShopId);
 //      if (ShopId) {
 //        this.$router.push(
-//          '/home', 'Home'
+//          '/room', 'Room'
 //        )
 //      } else {
 //        return;

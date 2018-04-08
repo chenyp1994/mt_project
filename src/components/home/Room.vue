@@ -169,6 +169,26 @@
     },
     created(){
       var _this = this;
+
+      if (window.localStorage.getItem("ShopId")) {
+        axios.get('/getfoodbytable',
+          {
+            params: {
+              mer: 32,
+              sho: 119,
+              tab: 912
+            }
+          }
+        ).then(function (res) {
+            var foodData = res.data;
+          _this.goods = res.data;
+          _this.tableName = foodData.tablename;
+          document.title=foodData.shopname;
+          console.log(res);
+        })
+      }
+
+      //
       _this.goods = JSON.parse(window.localStorage.getItem("AllData")).goods;
       for (var m = 0; m < _this.goods.length; m++) {
         for (var i = 0; i < _this.goods[m].foods.length; i++) {
