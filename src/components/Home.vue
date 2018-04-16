@@ -157,8 +157,9 @@
           this.requestData.employeeId = employeeId;
           this.requestData.mealsNumbel = mealsNumbel;
           this.requestData.tableId = this.openRoom.id;
-          window.localStorage.setItem("requestData", JSON.stringify(this.requestData));
-          window.localStorage.setItem("AllData", JSON.stringify(this.merchanData));
+          // window.localStorage.setItem("requestData", JSON.stringify(this.requestData));
+         window.localStorage.setItem("requestData", JSON.stringify(this.requestData));
+          window.localStorage.setItem("AllData", JSON.stringify(this.merchanData.foodlist));
           console.log(this.openRoom);
           this.$router.push(
             '/room', 'Room'

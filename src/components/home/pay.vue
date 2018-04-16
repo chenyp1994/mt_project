@@ -93,16 +93,23 @@
           + (minutes < 10 ? "0" + minutes : minutes) + (seconds < 10 ? "0" + seconds : seconds) + random;
         console.log(year, month, date, hours, minutes, seconds, random, nowDate);
         //var memus = JSON.parse(window.localStorage.getItem("downMenu"));
-
+        var mealsNumbel,employeeId;
+        if (JSON.parse(window.localStorage.getItem("isGuest"))){
+          mealsNumbel = 1;
+          employeeId = 1;
+        }else {
+          mealsNumbel = JSON.parse(window.localStorage.getItem("requestData")).mealsNumbel;
+          employeeId = JSON.parse(window.localStorage.getItem("requestData")).employeeId;
+        }
         var remark = document.getElementById("remark").value;
         let requestData = {
           orderInfo: {
             orderId: nowDate,
             remark: remark,
-            shopId: window.localStorage.getItem("ShopId"),
-            tableId: JSON.parse(window.localStorage.getItem("requestData")).tableId.toString(),
-            mealsNumbel: JSON.parse(window.localStorage.getItem("requestData")).mealsNumbel,
-            employeeId: JSON.parse(window.localStorage.getItem("requestData")).employeeId,
+            shopId: window.localStorage.getItem("shopId"),
+            tableId: window.localStorage.getItem("tableId"),
+            mealsNumbel:mealsNumbel,
+            employeeId: employeeId
           },
           orderItem: order,
         };
@@ -152,7 +159,7 @@
         var random = Math.floor(Math.random() * (900) + 100);
         var nowDate = year + (month < 10 ? "0" + month : month) + (date < 10 ? "0" + date : date) + (hours < 10 ? "0" + hours : hours)
           + (minutes < 10 ? "0" + minutes : minutes) + (seconds < 10 ? "0" + seconds : seconds) + random;
-        window.location.href = "/saobei/getOpenWapPay?&merchantId=35&shopId=72&totalFee=" + window.localStorage.getItem("totalPrice") * 100
+        window.location.href = "/saobei/getOpenWapPay?&merchantId="+window.localStorage.getItem("merchantId")+"&shopId="+window.localStorage.getItem("shopId")+"&totalFee=" + window.localStorage.getItem("totalPrice") * 100
           + "&orderId=" + nowDate;
         window.localStorage.clear();
       }
