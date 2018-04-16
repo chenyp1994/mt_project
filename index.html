@@ -4,9 +4,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0,height=device-height">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <meta http-equiv="Pragma" content="no-cache" />
-  <meta http-equiv="Expires" content="0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+  <meta http-equiv="Pragma" content="no-cache"/>
+  <meta http-equiv="Expires" content="0"/>
   <title></title>
 </head>
 <style>
@@ -41,26 +41,38 @@
 </style>
 
 <body>
-  <!-- <script>
-  let url = window.location.search;
-  let obj = {};
-  let reg = /[?&][^?&]+=[^?&]+/g;
-  let arr = url.match(reg);
-  // ['?id=12345', '&a=b']
-  if (arr) {
-    arr.forEach((item) => {
-      let tempArr = item.substring(1).split('=');
-      // 因为tempArr是url中的参数，所以要用decode进行转化
-      let key = decodeURIComponent(tempArr[0]);
-      let val = decodeURIComponent(tempArr[1]);
-      obj[key] = val;
-    });
-    window.localStorage.setItem("urlData",JSON.stringify(obj));
-    console.log(window.localStorage);
+<script>
+  window.onbeforeunload = function () {
+    var hh = window.location.pathname.split("/");
+    window.location.href = "/web";
+    switch (hh.length) {
+      case 2:
+        this.$router.push("/" + hh[1], hh[1]);
+        break;
+      case 3:
+        this.$router.push("/" + hh[2], hh[2]);
+        break;
+    }
   }
-</script> -->
-  <div id="app"></div>
-  <!-- built files will be auto injected -->
+  //  let  url = window.location.search;
+  //  let obj = {};
+  //  let reg = /[?&][^?&]+=[^?&]+/g;
+  //  let arr = url.match(reg);
+  //  // ['?id=12345', '&a=b']
+  //  if (arr) {
+  //    arr.forEach((item) => {
+  //      let tempArr = item.substring(1).split('=');
+  //      // 因为tempArr是url中的参数，所以要用decode进行转化
+  //      let key = decodeURIComponent(tempArr[0]);
+  //      let val = decodeURIComponent(tempArr[1]);
+  //      obj[key] = val;
+  //    });
+  //    window.localStorage.setItem("urlData", JSON.stringify(obj));
+  //    console.log(window.localStorage);
+  //  }
+</script>
+<div id="app"></div>
+<!-- built files will be auto injected -->
 </body>
 
 </html>
