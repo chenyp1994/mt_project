@@ -42,18 +42,18 @@
 
 <body>
 <script>
-  window.onbeforeunload = function () {
-    var hh = window.location.pathname.split("/");
-    window.location.href = "/web";
-    switch (hh.length) {
-      case 2:
-        this.$router.push("/" + hh[1], hh[1]);
-        break;
-      case 3:
-        this.$router.push("/" + hh[2], hh[2]);
-        break;
-    }
-  }
+//  window.onbeforeunload = function () {
+//    var hh = window.location.pathname.split("/");
+//    window.location.href = "/web";
+//    switch (hh.length) {
+//      case 2:
+//        this.$router.push("/" + hh[1], hh[1]);
+//        break;
+//      case 3:
+//        this.$router.push("/" + hh[2], hh[2]);
+//        break;
+//    }
+//  }
   //  let  url = window.location.search;
   //  let obj = {};
   //  let reg = /[?&][^?&]+=[^?&]+/g;

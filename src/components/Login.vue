@@ -92,9 +92,13 @@
     },
 
     created() {
+//        window.onbeforeunload=function () {
+//          window.localStorage.clear();
+//        }
       // document.title = "登录";
       //      const s = window.location.pathname;
       //      const pathname = s.split("/")[1];
+      window.localStorage.clear();
       const mer = this.getQueryString("mer");
       const shopId = this.getQueryString("sho");
       const tableId = this.getQueryString("tab");
