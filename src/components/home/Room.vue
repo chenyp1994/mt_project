@@ -15,7 +15,9 @@
               @mouseover="toggleRoom(item,index)">
             <!--<img :src="item.img_url">-->
             {{item.foodCategory}}
-            <span></span>
+            <span class="food_1" v-show="item.seletedNum">
+          {{item.seletedNum}}
+        </span>
           </li>
           <!--<li v-for="(item, index) in lists" v-bind:class="{active:index == num}" @mouseover="toggleRoom(index)">-->
           <!--<img :src="item.img_url">-->
@@ -28,7 +30,7 @@
           <div class="menuimg_div"><span><img :src="'http://113.105.152.179:8080/foodimage/png/'+item.avator"/></span>
           </div>
           <div class=food_item_div><span class="food_name_span">{{item.name}}</span>
-            <p class="money_p">&yen;&nbsp;{{item.cost}}
+            <p class="money_p">&yen;&nbsp;{{item.weixin}}
               <span @click="onChooseNorms(item,$event)" class="norms_span"
                     v-if="item.foodtasetEntity.length!=0 ||item.foodsize.length!=0">选规格</span>
               <span v-else="" class="food_nums_count_span">
@@ -42,16 +44,6 @@
           </div>
         </div>
       </div>
-
-      <!--<div v-for="(room, index) in goods.foods" v-show="index == num" @mouseover="onRoomOpen(room)">-->
-      <!--<div class="roomdiv">-->
-      <!--<p>-->
-      <!--{{room}}-->
-      <!--</p>-->
-      <!--</div>-->
-      <!--</div>-->
-      <!--</div>-->
-      <!--</div>-->
     </div>
     <div id="food_norms" class="foodNormsDiv">
       <div class="food_center">
@@ -62,36 +54,19 @@
         <div class="taste_item_div" id="size_item_div">
           <p class="norms_la">规格</p>
           <label class="ladu_label" v-for="size_item in food_info.foodsize">
-            <input type="checkbox" name="size" :value="size_item.size"/>{{size_item.size}}</label>
+            <input type="radio" name="size" :value="size_item.title" lazy
+                   @change="onSelectedSize(size_item)"/>{{size_item.title}}</label>
         </div>
-        <!--<div class="food_center_normInfo">-->
-        <!--<label>-->
-        <!--<input type="checkbox"/>-->
-        <!--</label>-->
-        <!--<p class="norms_la">规格</p>-->
-        <!--<ul>-->
-        <!--<li class="norm_span">小份</li>-->
-        <!--<li class="norm_span">中份</li>-->
-        <!--<li class="norm_span">大份</li>-->
-        <!--</ul>-->
-        <!--&lt;!&ndash;<p><span class="norm_span">小份</span><span class="norm_span">中份</span><span class="norm_span">大份</span></p>&ndash;&gt;-->
-        <!--</div>-->
         <div class="food_center_laduInfo">
-          <!--<p>辣度</p>-->
-          <!--<label class="ladu_label"><input type="radio"/>微辣</label>-->
-          <span @click="onShowNorms(food_info)" class="taste_select_span">选择口味</span>
-          <input type="text" readonly placeholder="这里是选择的口味"/>
-          <!--<ul>-->
-          <!--<li class="norm_la">微辣</li>-->
-          <!--<li class="norm_la">中辣</li>-->
-          <!--<li class="norm_la">特辣</li>-->
-          <!--</ul>-->
-          <!--<p class="norms_la"><span class="norm_span">微辣</span><span class="norm_span">中辣</span><span class="norm_span">特辣</span>-->
-          <!--</p>-->
+          <p class="norms_la">口味</p>
+          <label class="ladu_label" v-for="taste_item in food_info.foodtasetEntity">
+            <input type="radio" name="tasteEntity" :value="taste_item.name"/>{{taste_item.name}}</label>
         </div>
         <div class="food_center_price">
-          <span class="trueprice_span">&yen;{{food_info.cost}}</span>
-          <span class="oriprice_span">&yen;{{food_info.retailPrice}}</span><span class="ladu_span">（微辣）</span>
+          <span class="trueprice_span">&yen;{{food_info.weixin}}</span>
+          <span class="oriprice_span">&yen;{{food_info.retailPrice}}</span>
+          <span class="ladu_span">{{food_info.remark
+            }}</span>
           <span class="food_center_shopcart_span" @click="onAddFood(food_info)">
             <img src="../../assets/shopcart_s.png"/>加入购物车</span>
         </div>
@@ -105,7 +80,7 @@
           <ul>
             <li v-for="item in menuItem">
               <span class="shopcart_name_span">{{item.name}}</span>
-              <span class="shopcart_money_span">&yen;{{item.cost}}</span>
+              <span class="shopcart_money_span">&yen;{{item.weixin}}</span>
               <span class="shopcart_count_span">
                 <span @click="onReduceFoodItem(item)"><img src="../../assets/minus.png"/></span>
                 {{item.num}}
@@ -161,22 +136,25 @@
         food_info: [], //点击菜单弹出窗口信息
         foodNums: 0, //购物车的总数
         isShop: true,
-        menuItem: new Array(), //购物车里的菜单
+        menuItem: [], //购物车里的菜单
         isShowNorm: false,
         tasteEntity: [],
         foodsize: [],
         selectedTaste: [],
         totalPrice: 0,
-        isGuest: 0
+        isGuest: 0,
+//        openFoodInfo:[]//这个是打开选规格窗口的数据
       };
+    },
+
+    watch: {
+      menuItem: function (val, oldVal) {
+        console.table(val, oldVal);
+      }
     },
     created() {
       var _this = this;
       _this.isGuest = JSON.parse(window.localStorage.getItem("isGuest"));
-//      window.onbeforeunload = function (event) {
-//          console.log(event);
-//        window.localStorage.clear();
-//      }
       //getfoodbytable ../static/respons.json
 
       if (window.localStorage.length <= 4) {
@@ -191,16 +169,29 @@
             }
           )
             .then(function (res) {
-              _this.goods = res.data.foodlist;
-              //          _this.tableName = foodData.tablename;
-              for (var m = 0; m < _this.goods.length; m++) {
-                for (var i = 0; i < _this.goods[m].foods.length; i++) {
-                  _this.goods[m].foods[i].num = 0;
+              if (res.data.foodlist.length == 0) {
+                alert("该店铺相关数据为空");
+              } else {
+                _this.menus = res.data.foodlist[0].foods;
+                document.title = res.data.shopname;
+                _this.goods = res.data.foodlist;
+                //          _this.tableName = foodData.tablename;
+                for (var m = 0; m < _this.goods.length; m++) {
+                  _this.goods[m].seletedNum = 0;
+                  if (_this.goods[m].foods == null) {
+                    continue;
+                  } else {
+                    for (var i = 0; i < _this.goods[m].foods.length; i++) {
+                      _this.goods[m].foods[i].num = 0;
+                      if (_this.goods[m].foods[i].foodtasetEntity == null) {
+                        _this.goods[m].foods[i].foodtasetEntity = [];
+                      } else {
+                        continue;
+                      }
+                    }
+                  }
                 }
               }
-              _this.menus = res.data.foodlist[0].foods;
-              document.title = res.data.shopname;
-              ////            console.log(res);
             });
         } else {
           eventBus.$on("AttrDeliver", function (val) {
@@ -224,22 +215,6 @@
         _this.goods = JSON.parse(window.localStorage.getItem("AllData"));
         _this.menus = _this.goods[0].foods;
       }
-
-      //
-      //      _this.goods = JSON.parse(window.localStorage.getItem("AllData")).goods;
-
-      //      _this.menus = _this.goods[0].foods;
-      //      _this.shopName = JSON.parse(window.localStorage.getItem("AllData")).shopname;
-      //      _this.tableName = window.localStorage.getItem("tableName");
-      //      console.log(window.localStorage);
-      //
-      //
-      //      if (_this.tableName != window.localStorage.getItem("tableName")) {
-      //        _this.tableName = window.localStorage.getItem("tableName");
-      //      }
-      //      if (_this.menuItem != window.localStorage.getItem("downMenu")) {
-      //        _this.menuItem = window.localStorage.getItem("downMenu");
-      //      }
     },
     beforeDestroy() {
       var _this = this;
@@ -256,7 +231,7 @@
       window.localStorage.removeItem("AllData");
       window.localStorage.setItem("AllData", JSON.stringify(_this.goods));
       window.localStorage.removeItem("downMenu");
-      window.localStorage.setItem("downMenu", JSON.stringify(_this.menuItem)); //菜单
+      window.localStorage.setItem("downMenu", JSON.stringify(_this.menuItem)); //购物车里面的菜单
       window.localStorage.removeItem("menus");
       window.localStorage.setItem("menus", JSON.stringify(_this.menus)); //选择过的完整菜单
       window.localStorage.removeItem("menusNum");
@@ -271,19 +246,30 @@
     methods: {
       toggleRoom: function (foods, index) {
         //        var _this = this;
+        var menu = new Object();
+        menu.item = foods.foods;
         this.num = index;
-        this.menus = foods.foods;
+        this.menus = menu;
         //        for (var i = 0; i < _this.menus.length; i++) {
         //          _this.menus[i].num = 0;
         //        }
         console.log(this.menus);
       },
       onChooseNorms: function (food, event) {
+        var data = new Object();
+        data.id = food.id;
+        data.name = food.name;
+        data.num = food.num;
+        data.weixin = food.weixin;
+        data.foodsize = food.foodsize;
+        data.foodtasetEntity = food.foodtasetEntity;
+        data.avator = food.avator;
+        data.retailPrice = food.retailPrice;
+
         document
           .getElementById("food_norms")
           .setAttribute("class", "dis_foodNormsDiv");
-        this.food_info = food;
-        //        console.log(food);
+        this.food_info = data;
       },
       onCloseRoom: function () {
         document
@@ -291,56 +277,68 @@
           .setAttribute("class", "nodis_foodNormsDiv");
       },
       //规格窗口里的加入购物车的方法
-      onAddFood: function (food_info) {
-        food_info.remark = "";
+      onAddFood: function (fooditem) {
+        var _this = this;
+        var arr = new Object();
+        arr.remark = "";
+        arr.id = fooditem.id;
+        arr.weixin = fooditem.weixin;
+        arr.foodsize = fooditem.foodsize;
+        arr.foodtasetEntity = fooditem.foodtasetEntity;
+        arr.num = 0;
+        arr.name = fooditem.name;
+        arr.avator = fooditem.avator;
+//        arr.remark = "";
+        console.log(1, arr.remark, _this.menuItem);
         if (
-          food_info.foodtasetEntity.length != 0 ||
-          food_info.foodtasetEntity.length != 0
+          arr.foodsize.length != 0 ||
+          arr.foodtasetEntity.length != 0
         ) {
           var sizeCheckbox = document.getElementsByName("size");
-          //          var tasteCheckbox = document.getElementsByName("taste");
-          for (var i = 0; i < sizeCheckbox.length; i++) {
-            if (sizeCheckbox[i].checked) {
-              food_info.remark = sizeCheckbox[i].value;
-            } else {
-              continue;
+          var tasteCheckbox = document.getElementsByName("tasteEntity");
+          if (sizeCheckbox != null)
+            for (var i = 0; i < sizeCheckbox.length; i++) {
+              if (sizeCheckbox[i].checked) {
+                arr.remark = sizeCheckbox[i].value + ",";
+              } else {
+                continue;
+              }
+            }
+
+          if (tasteCheckbox != null) {
+            for (var j = 0; j < tasteCheckbox.length; j++) {
+              if (tasteCheckbox[j].checked) {
+                arr.remark += tasteCheckbox[j].value;
+              } else {
+                continue;
+              }
             }
           }
-          //          for (var i = 0; i < tasteCheckbox.length; i++) {
-          //            if (tasteCheckbox[i].checked) {
-          //              if (food_info.remark == "") {
-          //                food_info.remark += tasteCheckbox[i].value;
-          //              } else {
-          //                food_info.remark = "," + tasteCheckbox[i].value;
-          //              }
-          //            } else {
-          //              continue;
-          //            }
-          //          }
-          //          ;
         }
-        console.log(food_info);
-        //        if (food_info.foodsize.length != 0) {
-        //          var remark = document.getElementById("remark").value;
-        //          fooditem.remark = remark
-        //        }
-        this.foodNums++;
-        this.totalPrice += food_info.cost;
+        console.log(2, arr.remark, _this.menuItem);
+        _this.foodNums++;
+        _this.totalPrice += arr.weixin;
         //找口味一样的菜单
-        var isSameid = this.menuItem.findIndex(x => x.id == food_info.id);
+        var isSameid = _this.menuItem.findIndex(x => x.id == arr.id);
         var isSameTaste;
         if (isSameid == -1) {
-          food_info.num++;
-          this.menuItem.push(food_info);
+          arr.num++;
+          _this.menuItem.push(arr);
+          console.log(6, arr, _this.menuItem);
         } else {
-          if (food_info.remark === this.menuItem[isSameid].remark) {
-            this.menuItem[isSameid].num++;
+          if (arr.remark === _this.menuItem[isSameid].remark) {
+            _this.menuItem[isSameid].num++;
+            console.log(7, _this.menuItem);
           } else {
-            food_info.num++;
-            this.menuItem.push(food_info);
+            arr.num++;
+            _this.menuItem.push(arr);
+//            _this.menuItem[isSameid].num++;
+            console.log(8, _this.menuItem);
           }
         }
+        console.log(9, _this.menuItem);
         //        console.log(this.menuItem);
+
         document
           .getElementById("food_norms")
           .setAttribute("class", "nodis_foodNormsDiv");
@@ -348,7 +346,7 @@
       //点击选规格按钮后的加号按钮方法
       onAddFoodItem: function (fooditem) {
         this.foodNums++;
-        this.totalPrice += fooditem.cost;
+        this.totalPrice += fooditem.weixin;
         //找id一样的菜单
         var isSameid = this.menuItem.findIndex(x => x.id == fooditem.id);
 
@@ -366,25 +364,51 @@
         }
         console.log(this.menuItem, isSameid);
       },
-      onReduceFoodItem: function (food_info) {
+      onReduceFoodItem: function (fooditem_reduce) {
         var _this = this;
-        food_info.num--;
-        console.log(food_info.num, 1);
-        var isSameID = _this.menus.findIndex(x => x.id == food_info.id);
-        var shopItemId = _this.menuItem.findIndex(x => x.id == food_info.id);
-        _this.menuItem[shopItemId].num = food_info.num;
-        _this.menus[isSameID].num = food_info.num;
-        // console.log(shopItemId, food_info.num, 2);
+        fooditem_reduce.num--;
+        console.log(fooditem_reduce.num, 1);
+        var isSameID = _this.menus.findIndex(x => x.id == fooditem_reduce.id);
+        var shopItemId = _this.menuItem.findIndex(x => x.id == fooditem_reduce.id);
+        _this.menuItem[shopItemId].num = fooditem_reduce.num;
+        _this.menus[isSameID].num = fooditem_reduce.num;
+        // console.log(shopItemId, fooditem_reduce.num, 2);
         //        _this.menuItem[shopItemId].num--;
         if (_this.menuItem[shopItemId].num == 0) {
           _this.menuItem.splice(shopItemId, 1);
-          // console.log(food_info.num, 3);
+          // console.log(fooditem_reduce.num, 3);
         }
-        // console.log(food_info.num, 4);
-        _this.totalPrice -= food_info.cost;
+        // console.log(fooditem_reduce.num, 4);
+        _this.totalPrice -= fooditem_reduce.weixin;
         _this.foodNums--;
-        // console.log(food_info.num, 5);
+        // console.log(fooditem_reduce.num, 5);
         //        _this.menus[isSameID].num--;
+      },
+
+      //选择规格对应价钱
+      onSelectedSize: function (size_item) {
+        var price = size_item.weixin;
+        this.food_info.weixin = price;
+//        console.log(this.food_info, this.menuItem);
+//        var sizeCheckbox = document.getElementsByName("size");
+//        var tasteCheckbox = document.getElementsByName("tasteEntity");
+//        if (sizeCheckbox != null)
+//          for (var i = 0; i < sizeCheckbox.length; i++) {
+//            if (sizeCheckbox[i].checked) {
+//              this.food_info.remark = sizeCheckbox[i].value + ",";
+//            } else {
+//              continue;
+//            }
+//          }
+//        if (tasteCheckbox != null) {
+//          for (var j = 0; j < tasteCheckbox.length; j++) {
+//            if (tasteCheckbox[j].checked) {
+//              this.food_info.remark += tasteCheckbox[j].value;
+//            } else {
+//              continue;
+//            }
+//          }
+//        }
       },
       onDisplayShop: function (isShop, e) {
         var shopcls = isShop ? "display_shop" : "no_display_shop";
@@ -394,12 +418,12 @@
         this.isShop = !isShop;
       },
       //显示菜品口味，多选
-      onShowNorms: function (food_info) {
-        this.tasteEntity = food_info.foodtasetEntity;
-        this.foodsize = food_info.foodsize;
-        this.isShowNorm = true;
-        console.log(food_info);
-      },
+//      onShowNorms: function (food_info) {
+//        this.tasteEntity = food_info.foodtasetEntity;
+//        this.foodsize = food_info.foodsize;
+//        this.isShowNorm = true;
+//        console.log(food_info);
+//      },
       //清空购物车
       onClearShop: function () {
         this.menuItem.splice(0, this.menuItem.length);
@@ -446,7 +470,7 @@
           orderItem.foodId = this.menus[i].id;
           orderItem.foodName = this.menus[i].name;
           orderItem.qty = this.menus[i].num;
-          orderItem.price = this.menus[i].cost;
+          orderItem.price = this.menus[i].weixin;
           orderItem.remark = this.menus[i].remark;
           order.push(orderItem);
         }

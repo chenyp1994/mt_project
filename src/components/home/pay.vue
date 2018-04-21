@@ -10,11 +10,16 @@
     <div class="menu_div">
       <ul>
         <li v-for="item in menus">
-          <div class="Img_div"></div>
+          <div class="Img_div">
+            <img :src="'http://113.105.152.179:8080/foodimage/png/'+item.avator"/>
+          </div>
           <div class="menu_list_div">
-            <p class="menu_name_p">{{item.name}}<span class="cost_span">&yen;{{item.cost}}</span></p>
+            <p class="menu_name_p">{{item.name}}<span class="cost_span">&yen;{{item.weixin}}</span></p>
             <span class="num_span">
               x{{item.num}}
+            </span>
+            <span class="num_span">
+              {{item.remark}}
             </span>
           </div>
         </li>
@@ -27,11 +32,10 @@
       </div>
       <div class="result_div" v-if="">
         <span class="result_first_span">合计</span><span class="total_money_span">&yen;{{totalPrice}}</span>
-        <span class="signin_span" @click="onDownOrder()"
-              v-if="payornot">提交订单</span>
-        <span v-else="" class="pay_span" @click="onGetOpenWapPay()">
-          结算
-        </span>
+        <span class="signin_span" @click="onDownOrder()">提交订单</span>
+        <!--<span v-else="" class="pay_span" @click="onGetOpenWapPay()">-->
+          <!--结算-->
+        <!--</span>-->
       </div>
     </div>
   </div>
@@ -75,7 +79,7 @@
           orderItem.foodId = this.menus[i].id;
           orderItem.foodName = this.menus[i].name;
           orderItem.qty = this.menus[i].num;
-          orderItem.price = this.menus[i].cost;
+          orderItem.price = this.menus[i].weixin;
           orderItem.remark = this.menus[i].remark;
           order.push(orderItem);
         }
@@ -123,22 +127,9 @@
           {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
         )
           .then(function (res) {
-//              alert(res);
-//            axios.get("/saobei/getOpenWapPay", {
-//              params: {
-//                merchantId: 35,
-//                shopId: 72,//window.localStorage.getItem("ShopId"),
-//                totalFee: window.localStorage.getItem("totalPrice") * 100,//以分为单位
-//                orderId: nowDate
-//              }
-//            })
-//              .then(function (res) {
-//                  alert(res);
-////                  console.log(res);
-//              })
-//              .catch(function (error) {
-//                alert(error);
-//              });
+            window.location.href = "/saobei/getOpenWapPay?&merchantId="+window.localStorage.getItem("merchantId")+"&shopId="+window.localStorage.getItem("shopId")+"&totalFee=" + window.localStorage.getItem("totalPrice") * 100
+              + "&orderId=" + nowDate;
+            window.localStorage.clear();
           })
           .catch(function (error) {
             console.log(error);
@@ -256,6 +247,9 @@
     width: 20%;
     height: inherit;
   }
+  .Img_div img{
+    max-width: 100%;
+  }
 
   .menu_list_div {
     padding: 0.3125em 0.625em;
@@ -275,7 +269,11 @@
 
   .num_span {
     display: block;
+    float: left;
+    font-size: 1em;
+    line-height: 1.3125em;
     color: #91A4AD;
+    margin-left:1em;
     padding: 0.3125em 0em 0.625em 0em;
   }
 
