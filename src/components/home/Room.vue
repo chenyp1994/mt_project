@@ -15,7 +15,7 @@
               @mouseover="toggleRoom(item,index)">
             <!--<img :src="item.img_url">-->
             {{item.foodCategory}}
-            <span class="food_1" v-show="item.seletedNum">
+            <span class="selectedNum_span" v-show="item.seletedNum">
           {{item.seletedNum}}
         </span>
           </li>
@@ -159,7 +159,7 @@
 
       if (window.localStorage.length <= 4) {
         if (JSON.parse(window.localStorage.getItem("isGuest"))) {
-          axios.get("./static/respons.json",
+          axios.get("/getfoodbytable",
             {
               params: {
                 mer: window.localStorage.getItem("merchantId"),
@@ -191,6 +191,8 @@
                     }
                   }
                 }
+                ;
+                console.log(_this.goods);
               }
             });
         } else {
@@ -246,10 +248,10 @@
     methods: {
       toggleRoom: function (foods, index) {
         //        var _this = this;
-        var menu = new Object();
-        menu.item = foods.foods;
+//        var menu = new Object();
+//        menu.item = foods.foods;
         this.num = index;
-        this.menus = menu;
+        this.menus = foods.foods;
         //        for (var i = 0; i < _this.menus.length; i++) {
         //          _this.menus[i].num = 0;
         //        }
@@ -288,6 +290,12 @@
         arr.num = 0;
         arr.name = fooditem.name;
         arr.avator = fooditem.avator;
+        var cateNum = this.goods.findIndex(x => x.foodCategory == fooditem.categoryname);
+        if (cateNum == -1) {
+          alert("返回菜单项的大类菜单名为空");
+        } else {
+          _this.goods[cateNum].seletedNum++;
+        }
 //        arr.remark = "";
         console.log(1, arr.remark, _this.menuItem);
         if (
@@ -346,6 +354,14 @@
       //点击选规格按钮后的加号按钮方法
       onAddFoodItem: function (fooditem) {
         this.foodNums++;
+        //找一样菜单大类名字，然后数字加一
+        var cateNum = this.goods.findIndex(x => x.foodCategory == fooditem.categoryname);
+        if(cateNum == -1){
+            alert("菜单项对应的大类菜单名称为空");
+        }else {
+          this.goods[cateNum].seletedNum++;
+        }
+        console.log(this.goods.seletedNum);
         this.totalPrice += fooditem.weixin;
         //找id一样的菜单
         var isSameid = this.menuItem.findIndex(x => x.id == fooditem.id);
@@ -366,6 +382,12 @@
       },
       onReduceFoodItem: function (fooditem_reduce) {
         var _this = this;
+        var cateNum = _this.goods.findIndex(x => x.foodCategory == fooditem_reduce.categoryname);
+        if (cateNum == -1) {
+          alert("返回数据的菜单名为空");
+        } else {
+          _this.goods[cateNum].seletedNum--;
+        }
         fooditem_reduce.num--;
         console.log(fooditem_reduce.num, 1);
         var isSameID = _this.menus.findIndex(x => x.id == fooditem_reduce.id);

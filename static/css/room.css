@@ -17,6 +17,7 @@
   display: flex;
   align-items: center;
 }
+
 .topbar_room span {
   display: inline-block;
   /*height: inherit;*/
@@ -24,7 +25,7 @@
   padding: 0em 1em;
 }
 
-.topbar_room span img{
+.topbar_room span img {
   vertical-align: middle;
 }
 
@@ -149,16 +150,36 @@
 }
 
 .category_list li {
-  /*padding: 0.825em 0.525em;*/
-  height: 3.25em;
-  /*text-align: center;*/
-  display: flex;
+  padding: 0.825em 0.525em;
+  /*height: 3.25em;*/
+  text-align: center;
+  /*display: flex;*/
   color: #263238;
   font-family: PingFangSC-Regular;
   font-weight: 700;
   border-bottom: 1px solid rgb(230, 230, 230);
-  align-items: center;
-  justify-content: center;
+  /*align-items: center;*/
+  /*justify-content: center;*/
+  overflow: hidden;
+  text-overflow:ellipsis;
+  white-space: nowrap;
+  /*position: relative;*/
+}
+
+.selectedNum_span {
+  background: #e67500;
+  color: #ffffff;
+  border-radius: 50%;
+  display: inline-block;
+  float: right;
+  /*position: absolute;*/
+  /*right: 0.25em;*/
+  /*margin-left: 0.625em;*/
+  text-align: center;
+  font-size: 0.825em;
+  width: auto;
+  height: auto;
+  padding: 0em 0em 0em 0.3125em;
 }
 
 .foods_list {
@@ -301,7 +322,7 @@
 .ladu_label input[type="radio"]:checked {
   -webkit-appearance: none;
   border-color: #e67500;
-  background: rgba(255,255,255,0);
+  background: rgba(255, 255, 255, 0);
 }
 
 .food_center_normInfo, .food_center_laduInfo {
