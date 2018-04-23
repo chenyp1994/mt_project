@@ -64,7 +64,6 @@
         _this.shopName = val.shopName;
         _this.menus = val.data;
         _this.totalPrice = val.totalPrice;
-        _this.totalPrice = val.totalPrice;
       });
     },
     methods: {
@@ -72,15 +71,17 @@
         history.go(-1)
       },
       onDownOrder: function () {
-        this.payornot = false;
+          var _this = this;
+        _this.payornot = false;
         var order = [];
-        for (var i = 0; i < this.menus.length; i++) {
+        for (var i = 0; i < _this.menus.length; i++) {
           var orderItem = new Object();
-          orderItem.foodId = this.menus[i].id;
-          orderItem.foodName = this.menus[i].name;
-          orderItem.qty = this.menus[i].num;
-          orderItem.price = this.menus[i].weixin;
-          orderItem.remark = this.menus[i].remark;
+          orderItem.foodId = _this.menus[i].id;
+          orderItem.foodName = _this.menus[i].name;
+          orderItem.qty = _this.menus[i].num;
+          orderItem.price = _this.menus[i].weixin;
+          orderItem.remark = _this.menus[i].remark;
+          orderItem.unit = _this.menus[i].title;
           order.push(orderItem);
         }
         ;
@@ -109,7 +110,7 @@
         let requestData = {
           orderInfo: {
             orderId: nowDate,
-            remark: remark,
+            remarks: remark,
             shopId: window.localStorage.getItem("shopId"),
             tableId: window.localStorage.getItem("tableId"),
             mealsNumbel:mealsNumbel,
@@ -127,7 +128,7 @@
           {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
         )
           .then(function (res) {
-            window.location.href = "/saobei/getOpenWapPay?&merchantId="+window.localStorage.getItem("merchantId")+"&shopId="+window.localStorage.getItem("shopId")+"&totalFee=" + window.localStorage.getItem("totalPrice") * 100
+            window.location.href = "/saobei/getOpenWapPay?&merchantId="+window.localStorage.getItem("merchantId")+"&shopId="+window.localStorage.getItem("shopId")+"&totalFee=" + _this.totalPrice * 100
               + "&orderId=" + nowDate;
             window.localStorage.clear();
           })
@@ -150,7 +151,7 @@
         var random = Math.floor(Math.random() * (900) + 100);
         var nowDate = year + (month < 10 ? "0" + month : month) + (date < 10 ? "0" + date : date) + (hours < 10 ? "0" + hours : hours)
           + (minutes < 10 ? "0" + minutes : minutes) + (seconds < 10 ? "0" + seconds : seconds) + random;
-        window.location.href = "/saobei/getOpenWapPay?&merchantId="+window.localStorage.getItem("merchantId")+"&shopId="+window.localStorage.getItem("shopId")+"&totalFee=" + window.localStorage.getItem("totalPrice") * 100
+        window.location.href = "/saobei/getOpenWapPay?&merchantId="+window.localStorage.getItem("merchantId")+"&shopId="+window.localStorage.getItem("shopId")+"&totalFee=" + _this.totalPrice * 100
           + "&orderId=" + nowDate;
         window.localStorage.clear();
       }

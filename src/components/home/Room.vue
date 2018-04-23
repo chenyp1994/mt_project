@@ -267,6 +267,8 @@
         data.foodtasetEntity = food.foodtasetEntity;
         data.avator = food.avator;
         data.retailPrice = food.retailPrice;
+        data.categoryname = food.categoryname;
+        data.title = food.title;
 
         document
           .getElementById("food_norms")
@@ -284,20 +286,20 @@
         var arr = new Object();
         arr.remark = "";
         arr.id = fooditem.id;
-        arr.weixin = fooditem.weixin;
+        arr.weixin = _this.food_info.weixin;
         arr.foodsize = fooditem.foodsize;
         arr.foodtasetEntity = fooditem.foodtasetEntity;
         arr.num = 0;
         arr.name = fooditem.name;
         arr.avator = fooditem.avator;
-        var cateNum = this.goods.findIndex(x => x.foodCategory == fooditem.categoryname);
+        arr.categoryname = fooditem.categoryname;
+        arr.title = fooditem.title;
+        var cateNum = _this.goods.findIndex(x => x.foodCategory == arr.categoryname);
         if (cateNum == -1) {
           alert("返回菜单项的大类菜单名为空");
         } else {
           _this.goods[cateNum].seletedNum++;
         }
-//        arr.remark = "";
-        console.log(1, arr.remark, _this.menuItem);
         if (
           arr.foodsize.length != 0 ||
           arr.foodtasetEntity.length != 0
@@ -308,6 +310,7 @@
             for (var i = 0; i < sizeCheckbox.length; i++) {
               if (sizeCheckbox[i].checked) {
                 arr.remark = sizeCheckbox[i].value + ",";
+                sizeCheckbox[i].checked = false;
               } else {
                 continue;
               }
@@ -325,7 +328,10 @@
         }
         console.log(2, arr.remark, _this.menuItem);
         _this.foodNums++;
-        _this.totalPrice += arr.weixin;
+        var price = parseFloat(arr.weixin);
+        _this.totalPrice = parseFloat(_this.totalPrice);
+        _this.totalPrice += price;
+        _this.totalPrice = _this.totalPrice.toFixed(2);
         //找口味一样的菜单
         var isSameid = _this.menuItem.findIndex(x => x.id == arr.id);
         var isSameTaste;
@@ -356,13 +362,16 @@
         this.foodNums++;
         //找一样菜单大类名字，然后数字加一
         var cateNum = this.goods.findIndex(x => x.foodCategory == fooditem.categoryname);
-        if(cateNum == -1){
-            alert("菜单项对应的大类菜单名称为空");
-        }else {
+        if (cateNum == -1) {
+          alert("菜单项对应的大类菜单名称为空");
+        } else {
           this.goods[cateNum].seletedNum++;
         }
         console.log(this.goods.seletedNum);
-        this.totalPrice += fooditem.weixin;
+        var price = parseFloat(fooditem.weixin);
+        this.totalPrice = parseFloat(this.totalPrice);
+        this.totalPrice += price;
+        this.totalPrice = this.totalPrice.toFixed(2);
         //找id一样的菜单
         var isSameid = this.menuItem.findIndex(x => x.id == fooditem.id);
 
@@ -389,7 +398,6 @@
           _this.goods[cateNum].seletedNum--;
         }
         fooditem_reduce.num--;
-        console.log(fooditem_reduce.num, 1);
         var isSameID = _this.menus.findIndex(x => x.id == fooditem_reduce.id);
         var shopItemId = _this.menuItem.findIndex(x => x.id == fooditem_reduce.id);
         _this.menuItem[shopItemId].num = fooditem_reduce.num;
@@ -401,7 +409,10 @@
           // console.log(fooditem_reduce.num, 3);
         }
         // console.log(fooditem_reduce.num, 4);
-        _this.totalPrice -= fooditem_reduce.weixin;
+        var price = parseFloat(fooditem_reduce.weixin);
+        _this.totalPrice = parseFloat(_this.totalPrice);
+        _this.totalPrice -= price;
+        _this.totalPrice = _this.totalPrice.toFixed(2);
         _this.foodNums--;
         // console.log(fooditem_reduce.num, 5);
         //        _this.menus[isSameID].num--;
