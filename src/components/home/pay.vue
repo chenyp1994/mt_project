@@ -129,7 +129,7 @@
         )
           .then(function (res) {
             window.location.href = "/saobei/getOpenWapPay?&merchantId="+window.localStorage.getItem("merchantId")+"&shopId="+window.localStorage.getItem("shopId")+"&totalFee=" + _this.totalPrice * 100
-              + "&orderId=" + nowDate;
+              + "&orderId=" + nowDate+"&orderBody="+_this.tableName;
             window.localStorage.clear();
           })
           .catch(function (error) {
@@ -244,7 +244,7 @@
   }
 
   .Img_div {
-    background: #000000;
+    /*background: #000000;*/
     width: 20%;
     height: inherit;
   }

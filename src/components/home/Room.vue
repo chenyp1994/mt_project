@@ -98,22 +98,9 @@
         <span><img
           src="../../assets/shopcart.png"></span></span>
         <p class="price_span" @click="onDisplayShop(isShop)">&yen;{{totalPrice}}</p>
-        <span class="pay_span" @click="onRedirectToPay()">去下单</span>
+        <span class="pay_span" @click="onRedirectToPay()" v-if="foodNums">去下单</span>
+        <span class="pay_span_gray" v-else="">去下单</span>
         <!--<span class="pay_span" @click="onPay()" v-else="">结算</span>-->
-      </div>
-    </div>
-    <div v-show="isShowNorm" class="taste_div" id="taste_div">
-      <div class="taste_center_div">
-        <p class="taste_title_p">请选择口味
-          <span @click="onCloseTasteDiv()"><img src="../../assets/close_icon.png"></span>
-        </p>
-        <div class="taste_item_div" id="taste_item_div">
-          <label class="ladu_label" v-for="taste_item in tasteEntity">
-            <input type="checkbox" name="taste" :value="taste_item.value"/>{{taste_item.taste}}</label>
-        </div>
-        <div class="taste_btn_div">
-          <span @click="onSelectTaste()">确定</span>
-        </div>
       </div>
     </div>
   </div>
@@ -175,7 +162,7 @@
                 _this.menus = res.data.foodlist[0].foods;
                 document.title = res.data.shopname;
                 _this.goods = res.data.foodlist;
-                //          _this.tableName = foodData.tablename;
+                _this.tableName = res.data.tablename;
                 for (var m = 0; m < _this.goods.length; m++) {
                   _this.goods[m].seletedNum = 0;
                   if (_this.goods[m].foods == null) {
@@ -215,6 +202,7 @@
         _this.totalPrice = JSON.parse(window.localStorage.getItem("totalPrice"));
         _this.foodNums = window.localStorage.getItem("menusNum");
         _this.goods = JSON.parse(window.localStorage.getItem("AllData"));
+        _this.tableName = (window.localStorage.getItem("tableName"));
         _this.menus = _this.goods[0].foods;
       }
     },
@@ -240,6 +228,8 @@
       window.localStorage.setItem("menusNum", _this.foodNums); //菜单数量
       window.localStorage.removeItem("totalPrice");
       window.localStorage.setItem("totalPrice", JSON.stringify(_this.totalPrice));
+      window.localStorage.removeItem("tableName");
+      window.localStorage.setItem("tableName", JSON.stringify(_this.tableName));
     },
     //    destroyed(){
     //      eventBus.$emit("PayAttrDeliver", {tableName:this.tableName,shopName:this.shopName,data: this.menuItem});
@@ -467,6 +457,9 @@
             continue;
           }
         }
+        for (var j= 0;j<this.goods.length;j++){
+          this.goods[j].seletedNum = 0;
+        };
         this.foodNums = 0;
         this.totalPrice = 0;
       },
