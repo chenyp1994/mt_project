@@ -11,40 +11,17 @@
               "price": 10.0,
               "name": "蜂蜜",
               "merchantFoodId": null
-            }
-          ],
-          "foodsize": [
-            {
-              "id": 1034,
-              "code": null,
-              "shopId": null,
-              "foodId": null,
-              "title": "大份",
-              "cost": 20.0,
-              "weixin": 20.5,
-              "merchantId": null,
-              "vipPrice": null,
-              "retailPrice": null,
-              "barcode": null,
-              "createTime": null,
-              "updateTime": null
             },
             {
-              "id": 1035,
-              "code": null,
-              "shopId": null,
-              "foodId": null,
-              "title": "小份",
-              "cost": 10.0,
-              "weixin": 10.01,
-              "merchantId": null,
-              "vipPrice": null,
-              "retailPrice": null,
-              "barcode": null,
-              "createTime": null,
-              "updateTime": null
+              "id": 1019,
+              "shopid": 160,
+              "merchantFoodTasteId": null,
+              "price": 20.0,
+              "name": "辣椒",
+              "merchantFoodId": null
             }
           ],
+          "foodsize": [],
           "categoryname": "哒哒大大大大大大",
           "id": 7636,
           "merchantId": 114,

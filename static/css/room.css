@@ -436,6 +436,7 @@
 .car_price_div {
   background: #353E4C;
   color: #fff;
+  z-index: 999;
   width: 100%;
   bottom: 0;
   left: 0;
@@ -537,7 +538,21 @@
   background: #ffffff;
   display: flex;
   flex-direction: column;
+  z-index: 999;
 }
+
+.shop_blank_div{
+  /*position: absolute;*/
+  width: 100%;
+  z-index: 998;
+  min-height: 1%;
+  flex-grow: 1;
+  top: 0;
+  left: 0;
+  background: inherit;
+}
+
+
 
 .shopItemDetail ul {
   width: 100%;
@@ -563,8 +578,14 @@
 }
 
 .shopcart_money_span {
-  flex-grow: 5;
+  flex-grow: 3;
   text-align: right;
+}
+.shopcart_remark_span{
+  flex-grow: 2;
+  text-align: left;
+  font-size: 0.75em;
+  margin-left: 0.3125em;
 }
 
 .shopcart_count_span {

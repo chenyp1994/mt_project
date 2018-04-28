@@ -1,12 +1,12 @@
 <template>
   <div class="pay_container">
     <div class="top_first">
-      <span @click="goback()"><img src="../../assets/back.png"/></span>下单
+      <span @click="goback()"><img src="../../assets/back.png"/></span>{{shopName}}
     </div>
     <!--<div class="shopname_div">-->
     <!--<span><img src="../../assets/shop_color.png"/></span>{{shopName}}-->
     <!--</div>-->
-    <div class="tablename_div">{{tableName}}</div>
+    <!--<div class="tablename_div">{{tableName}}</div>-->
     <div class="menu_div">
       <ul>
         <li v-for="item in menus">
@@ -61,10 +61,11 @@
       eventBus.$on("PayAttrDeliver", function (val) {
 //        _this.shopName=val.data.shopName;
         _this.tableName = val.tableName;
-        _this.shopName = val.shopName;
+
         _this.menus = val.data;
         _this.totalPrice = val.totalPrice;
       });
+      _this.shopName = window.localStorage.getItem("shopName");
     },
     methods: {
       goback: function () {
@@ -130,7 +131,7 @@
           .then(function (res) {
             window.location.href = "/saobei/getOpenWapPay?&merchantId="+window.localStorage.getItem("merchantId")+"&shopId="+window.localStorage.getItem("shopId")+"&totalFee=" + _this.totalPrice * 100
               + "&orderId=" + nowDate+"&orderBody="+_this.tableName;
-            window.localStorage.clear();
+//            window.localStorage.clear();
           })
           .catch(function (error) {
             console.log(error);
