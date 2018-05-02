@@ -53,7 +53,7 @@
         </div>
         <div class="taste_item_div" v-if="food_info.hasSize">
         </div>
-        <div class="taste_item_div" id="size_item_div" v-show="food_info.hasSize">
+        <div class="taste_item_div" id="size_item_div">
           <p class="norms_la">规格</p>
           <label class="ladu_label">
             <input type="radio" name="size" checked :value="food_info.title"
@@ -72,8 +72,7 @@
         <div class="food_center_price">
           <span class="trueprice_span">&yen;{{food_info.weixin}}</span>
           <span class="oriprice_span">&yen;{{food_info.retailPrice}}</span>
-          <span class="ladu_span">{{food_info.remark
-            }}</span>
+          <!--<span class="ladu_span">{{food_info.remark}}</span>-->
           <span class="food_center_shopcart_span" @click="onAddFood(food_info)">
             <img src="../../assets/shopcart_s.png"/>加入购物车</span>
         </div>
@@ -88,14 +87,18 @@
             src="../../assets/clear.png"/>清空</span></p>
           <ul>
             <li v-for="item in menuItem">
-              <span class="shopcart_name_span">{{item.name}}</span>
-              <span class="shopcart_money_span">&yen;{{item.weixin}}</span>
-              <span class="shopcart_remark_span">{{item.remark}}</span>
-              <span class="shopcart_count_span">
+              <div class="menuItem_div">
+                <span class="shopcart_name_span">{{item.name}}</span>
+                <span class="shopcart_money_span_none" v-if="!item.hasTaste">&yen;{{item.weixin}}<br><span style="font-size: .75em;">{{item.tasteRemark}}</span></span>
+                <span class="shopcart_money_span" v-else="">&yen;{{item.weixin}}<br><span style="font-size: .75em;">{{item.tasteRemark}}</span></span>
+                <span class="shopcart_remark_span">{{item.sizeRemark}}</span>
+                <span class="shopcart_count_span">
                 <span @click="onReduceFoodItem(item)"><img src="../../assets/minus.png"/></span>
                 {{item.num}}
                 <span @click="onAddFoodItem(item,$event)"><img src="../../assets/plus.png"/></span>
               </span>
+              </div>
+              <!--<span style="text-align: center;width: 100%;float: left">{{item.tasteRemark}}</span>-->
             </li>
           </ul>
         </div>
@@ -273,12 +276,12 @@
         data.categoryname = food.categoryname;
         data.title = food.title;
         var hasSize, hasTaste;
-        if (food.foodsize.length == 0) {
+        if (food.foodsize.length == 0||food.foodsize==null) {
           hasSize = false;
         } else {
           hasSize = true;
         }
-        if (food.foodtasetEntity.length == 0) {
+        if (food.foodtasetEntity.length == 0||food.foodtasetEntity==null) {
           hasTaste = false;
         } else {
           hasTaste = true;
@@ -311,6 +314,7 @@
         arr.avator = fooditem.avator;
         arr.categoryname = fooditem.categoryname;
         arr.title = fooditem.title;
+        arr.hasTaste = fooditem.hasTaste;
         var cateNum = _this.goods.findIndex(x => x.foodCategory == arr.categoryname);
 
         if (
@@ -324,7 +328,8 @@
             for (var i = 0; i < sizeCheckbox.length; i++) {
               if (sizeCheckbox[i].checked) {
                 checkedSize++;
-                arr.remark = "/"+sizeCheckbox[i].value;
+                arr.remark = sizeCheckbox[i].value;
+                arr.sizeRemark ="/"+sizeCheckbox[i].value;
 //                sizeCheckbox[i].checked = false;
               } else {
                 continue;
@@ -341,7 +346,8 @@
               if (tasteCheckbox[j].checked) {
                 checkedtaste++;
                 arr.remark += "," + tasteCheckbox[j].value;
-//                tasteCheckbox[j].checked = false;
+                arr.tasteRemark = tasteCheckbox[j].value;
+                tasteCheckbox[j].checked = false;
               } else {
                 continue;
               }
@@ -394,7 +400,7 @@
         var _this = this;
           _this.foodNums++;
         var arr = new Object();
-        arr.remark = "/"+fooditem.title;
+        arr.remark = fooditem.title;
         arr.id = fooditem.id;
         arr.weixin = fooditem.weixin;
         arr.preweixin = fooditem.weixin;
@@ -405,6 +411,8 @@
         arr.avator = fooditem.avator;
         arr.categoryname = fooditem.categoryname;
         arr.title = fooditem.title;
+        arr.sizeRemark = "/"+fooditem.title;
+        arr.hasTaste = false;
 
         //找一样菜单大类名字，然后数字加一
         var cateNum = _this.goods.findIndex(x => x.foodCategory == fooditem.categoryname);

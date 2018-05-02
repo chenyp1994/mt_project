@@ -1,7 +1,7 @@
 <template>
   <div class="pay_container">
     <div class="top_first">
-      <span @click="goback()"><img src="../../assets/back.png"/></span>{{shopName}}
+      <span @click="goback()"><img src="../../assets/back.png"/></span>{{tableName}}
     </div>
     <!--<div class="shopname_div">-->
     <!--<span><img src="../../assets/shop_color.png"/></span>{{shopName}}-->
@@ -18,8 +18,8 @@
             <span class="num_span">
               x{{item.num}}
             </span>
-            <span class="num_span">
-              {{item.remark}}
+            <span class="remark_span">
+              {{item.sizeRemark}}<br />{{item.tasteRemark}}
             </span>
           </div>
         </li>
@@ -32,7 +32,7 @@
       </div>
       <div class="result_div" v-if="">
         <span class="result_first_span">合计</span><span class="total_money_span">&yen;{{totalPrice}}</span>
-        <span class="signin_span" @click="onDownOrder()">提交订单</span>
+        <span class="signin_span" @click="onDownOrder()">立即支付 </span>
         <!--<span v-else="" class="pay_span" @click="onGetOpenWapPay()">-->
           <!--结算-->
         <!--</span>-->
@@ -276,6 +276,15 @@
     line-height: 1.3125em;
     color: #91A4AD;
     margin-left:1em;
+    padding: 0.3125em 0em 0.625em 0em;
+  }
+  .remark_span{
+    display: block;
+    float: left;
+    font-size: 1em;
+    line-height: 1.3125em;
+    color: #91A4AD;
+    /*margin-left:1em;*/
     padding: 0.3125em 0em 0.625em 0em;
   }
 
