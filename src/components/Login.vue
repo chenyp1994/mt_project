@@ -92,9 +92,6 @@
     },
 
     created() {
-//        window.onbeforeunload=function () {
-//          window.localStorage.clear();
-//        }
       // document.title = "登录";
       //      const s = window.location.pathname;
       //      const pathname = s.split("/")[1];

@@ -14,12 +14,8 @@
             <img :src="'http://113.105.152.179:8080/foodimage/png/'+item.avator"/>
           </div>
           <div class="menu_list_div">
-            <p class="menu_name_p">{{item.name}}<span class="cost_span">&yen;{{item.weixin}}</span></p>
-            <span class="num_span">
-              x{{item.num}}
-            </span>
-            <span class="remark_span">
-              {{item.sizeRemark}}<br />{{item.tasteRemark}}
+            <p class="menu_name_p">{{item.name}}&nbsp;x{{item.num+item.sizeRemark}}<span class="cost_span">&yen;{{item.weixin}}</span></p>
+            <span class="remark_span">{{item.tasteRemark}}
             </span>
           </div>
         </li>
@@ -174,6 +170,10 @@
     height: 100%;
     margin: 0em;
     padding: 0em;
+    display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
+    display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
+    display: -ms-flexbox;      /* TWEENER - IE 10 */
+    display: -webkit-flex;     /* NEW - Chrome */
     display: flex;
     flex-direction: column;
   }

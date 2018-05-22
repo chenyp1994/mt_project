@@ -79,7 +79,6 @@
       </div>
     </div>
     <div class="shop_carts autoheight" id="shop_carts">
-
       <div id="shopItem" class="no_display_shop">
         <div class="shop_blank_div" @click="onDisplayShop(isShop)"></div>
         <div class="shopItemDetail">
@@ -87,15 +86,17 @@
             src="../../assets/clear.png"/>清空</span></p>
           <ul>
             <li v-for="item in menuItem">
-              <div class="menuItem_div">
+              <div class="menuItem_div"v-show="item.num">
                 <span class="shopcart_name_span">{{item.name}}</span>
-                <span class="shopcart_money_span_none" v-if="!item.hasTaste">&yen;{{item.weixin}}<br><span style="font-size: .75em;">{{item.tasteRemark}}</span></span>
-                <span class="shopcart_money_span" v-else="">&yen;{{item.weixin}}<br><span style="font-size: .75em;">{{item.tasteRemark}}</span></span>
+                <span class="shopcart_money_span_none" v-if="!item.hasTaste">&yen;{{item.weixin}}<br><span
+                  style="font-size: .75em;">{{item.tasteRemark}}</span></span>
+                <span class="shopcart_money_span" v-else="">&yen;{{item.weixin}}<br><span
+                  style="font-size: .75em;">{{item.tasteRemark}}</span></span>
                 <span class="shopcart_remark_span">{{item.sizeRemark}}</span>
                 <span class="shopcart_count_span">
                 <span @click="onReduceFoodItem(item)"><img src="../../assets/minus.png"/></span>
                 {{item.num}}
-                <span @click="onAddFoodItem(item,$event)"><img src="../../assets/plus.png"/></span>
+                <span @click="onAddFoodItem(item)"><img src="../../assets/plus.png"/></span>
               </span>
               </div>
               <!--<span style="text-align: center;width: 100%;float: left">{{item.tasteRemark}}</span>-->
@@ -143,6 +144,7 @@
         selectedTaste: [],
         totalPrice: 0,
         isGuest: 0,
+        isCreate:0
 //        openFoodInfo:[]//这个是打开选规格窗口的数据
       };
     },
@@ -154,6 +156,13 @@
     },
     created() {
       var _this = this;
+      window.addEventListener("beforeunload", function () {
+//    if (window.localStorage.isGuest) {
+        window.localtion.href = "/web?mer=" + window.localStorage.getItem("merchantId") + "&sho="
+          + window.localStorage.getItem("shopId") + "&tab=" + window.localStorage.getItem("tableId");
+//    }
+      })
+//      _this.isCreate = !_this.isCreate;
       _this.isGuest = JSON.parse(window.localStorage.getItem("isGuest"));
       //getfoodbytable ../static/respons.json
 
@@ -177,7 +186,12 @@
                 window.localStorage.setItem("shopName", res.data.shopname);
                 document.title = res.data.shopname;
                 _this.goods = res.data.foodlist;
-                _this.tableName = res.data.tablename;
+                if (res.data.seat == null) {
+                  _this.tableName = res.data.tablename;
+                } else {
+                  _this.tableName = res.data.tablename + res.data.seat;
+                }
+
                 for (var m = 0; m < _this.goods.length; m++) {
                   _this.goods[m].seletedNum = 0;
                   if (_this.goods[m].foods == null) {
@@ -221,7 +235,39 @@
         _this.menus = _this.goods[0].foods;
       }
     },
-    beforeDestroy() {
+
+//    beforeMount(){
+//      alert("aaaa");
+////      alert("BeforeMounted");
+////      window.location.href="www.baidu.com";
+////      window.addEventListener("beforeunload", function (e) {
+////        var aaa = '确定要离开吗？';
+////        e.returnValue = aaa;
+////        return aaa;
+////      });
+//      //  挂载前状态
+//    },
+
+//    mounted()
+//    {
+//      //  挂载结束状态
+////      window.location.href="?";
+////      if(this.isCreate) {
+////        window.location.href = window.localtion.href = "?mer=" + window.localStorage.getItem("merchantId") + "&sho="
+////          + window.localStorage.getItem("shopId") + "&tab=" + window.localStorage.getItem("tableId");
+////      }else {
+////          return;
+////      }
+//      alert("bbbb");
+////      window.addEventListener("beforeunload",function (e) {
+////        var aaa = '确定要离开吗？';
+////        e.returnValue = aaa;
+////        return aaa;
+////      });
+//    }
+//    ,
+    beforeDestroy()
+    {
       var _this = this;
       var shopInfo = new Object();
       shopInfo.shopName = _this.shopName;
@@ -245,7 +291,8 @@
       window.localStorage.setItem("totalPrice", JSON.stringify(_this.totalPrice));
       window.localStorage.removeItem("tableName");
       window.localStorage.setItem("tableName", _this.tableName);
-    },
+    }
+    ,
     //    destroyed(){
     //      eventBus.$emit("PayAttrDeliver", {tableName:this.tableName,shopName:this.shopName,data: this.menuItem});
     ////      eventBus.$off("PayAttrDeliver");
@@ -261,7 +308,8 @@
         //          _this.menus[i].num = 0;
         //        }
         console.log(this.menus);
-      },
+      }
+      ,
       onChooseNorms: function (food, event) {
         var data = new Object();
         data.id = food.id;
@@ -276,12 +324,12 @@
         data.categoryname = food.categoryname;
         data.title = food.title;
         var hasSize, hasTaste;
-        if (food.foodsize.length == 0||food.foodsize==null) {
+        if (food.foodsize.length == 0 || food.foodsize == null) {
           hasSize = false;
         } else {
           hasSize = true;
         }
-        if (food.foodtasetEntity.length == 0||food.foodtasetEntity==null) {
+        if (food.foodtasetEntity.length == 0 || food.foodtasetEntity == null) {
           hasTaste = false;
         } else {
           hasTaste = true;
@@ -293,12 +341,14 @@
           .getElementById("food_norms")
           .setAttribute("class", "dis_foodNormsDiv");
         this.food_info = data;
-      },
+      }
+      ,
       onCloseRoom: function () {
         document
           .getElementById("food_norms")
           .setAttribute("class", "nodis_foodNormsDiv");
-      },
+      }
+      ,
       //规格窗口里的加入购物车的方法
       onAddFood: function (fooditem) {
         var _this = this;
@@ -329,13 +379,13 @@
               if (sizeCheckbox[i].checked) {
                 checkedSize++;
                 arr.remark = sizeCheckbox[i].value;
-                arr.sizeRemark ="/"+sizeCheckbox[i].value;
+                arr.sizeRemark = "/" + sizeCheckbox[i].value;
 //                sizeCheckbox[i].checked = false;
               } else {
                 continue;
               }
             }
-            if (!checkedSize){
+            if (!checkedSize) {
               alert("请选择规格");
               return;
             }
@@ -394,11 +444,12 @@
         document
           .getElementById("food_norms")
           .setAttribute("class", "nodis_foodNormsDiv");
-      },
+      }
+      ,
       //点击选规格按钮后的加号按钮方法
       onAddFoodItem: function (fooditem) {
         var _this = this;
-          _this.foodNums++;
+        _this.foodNums++;
         var arr = new Object();
         arr.remark = fooditem.title;
         arr.id = fooditem.id;
@@ -411,7 +462,7 @@
         arr.avator = fooditem.avator;
         arr.categoryname = fooditem.categoryname;
         arr.title = fooditem.title;
-        arr.sizeRemark = "/"+fooditem.title;
+        arr.sizeRemark = "/" + fooditem.title;
         arr.hasTaste = false;
 
         //找一样菜单大类名字，然后数字加一
@@ -428,6 +479,7 @@
         _this.totalPrice = _this.totalPrice.toFixed(2);
         //找id一样的菜单
         var isSameid = _this.menuItem.findIndex(x => x.id == arr.id);
+        var isMenuSameid = _this.menus.findIndex(x => x.id == arr.id);
 
         var isSameTaste;
         //        if (fooditem.nums == undefined) {
@@ -438,11 +490,19 @@
         if (isSameid == -1) {
           arr.num++;
           _this.menuItem.push(arr);
+//          fooditem.num++;
         } else {
           _this.menuItem[isSameid].num++;
         }
+        if(isMenuSameid == -1){
+            return;
+        }else {
+            _this.menus[isMenuSameid].num++;
+        }
+//        fooditem.num++;
         console.log(_this.menuItem, isSameid);
-      },
+      }
+      ,
       onReduceFoodItem: function (fooditem_reduce) {
         var _this = this;
         var cateNum = _this.goods.findIndex(x => x.foodCategory == fooditem_reduce.categoryname);
@@ -470,7 +530,8 @@
         _this.foodNums--;
         // console.log(fooditem_reduce.num, 5);
         //        _this.menus[isSameID].num--;
-      },
+      }
+      ,
 
       //选择规格对应价钱
       onSelectedSize: function (size_item) {
@@ -501,7 +562,8 @@
           }
         }
         this.food_info.weixin = price;
-      },
+      }
+      ,
       onSelectedTaste: function (taste_item) {
         var foodinfo = this.food_info;
         var price;
@@ -523,14 +585,16 @@
             }
           }
         this.food_info.weixin = price;
-      },
+      }
+      ,
       onDisplayShop: function (isShop, e) {
         var shopcls = isShop ? "display_shop" : "no_display_shop";
         var height = isShop ? "fullheight" : "autoheight";
         document.getElementById("shopItem").setAttribute("class", shopcls);
         document.getElementById("shop_carts").setAttribute("class", height);
         this.isShop = !isShop;
-      },
+      }
+      ,
       //显示菜品口味，多选
 //      onShowNorms: function (food_info) {
 //        this.tasteEntity = food_info.foodtasetEntity;
@@ -554,11 +618,13 @@
         ;
         this.foodNums = 0;
         this.totalPrice = 0;
-      },
+      }
+      ,
       //关闭口味选择窗口
       onCloseTasteDiv: function () {
         this.isShowNorm = false;
-      },
+      }
+      ,
       //选择口味操作
       onSelectTaste: function () {
         var tasteList = document.getElementsByName("taste");
@@ -572,7 +638,8 @@
         console.log(tasteList, taste);
         this.isShowNorm = false;
         this.selectedTaste = taste;
-      },
+      }
+      ,
       onRedirectToPay: function () {
 //      if (this.menuItem.length == 0) {
 //        alert("请先选择餐品再进行结算");
