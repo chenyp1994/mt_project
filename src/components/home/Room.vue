@@ -86,7 +86,7 @@
             src="../../assets/clear.png"/>清空</span></p>
           <ul>
             <li v-for="item in menuItem">
-              <div class="menuItem_div"v-show="item.num">
+              <div class="menuItem_div" v-show="item.num">
                 <span class="shopcart_name_span">{{item.name}}</span>
                 <span class="shopcart_money_span_none" v-if="!item.hasTaste">&yen;{{item.weixin}}<br><span
                   style="font-size: .75em;">{{item.tasteRemark}}</span></span>
@@ -144,7 +144,7 @@
         selectedTaste: [],
         totalPrice: 0,
         isGuest: 0,
-        isCreate:0
+        isCreate: 0
 //        openFoodInfo:[]//这个是打开选规格窗口的数据
       };
     },
@@ -494,10 +494,19 @@
         } else {
           _this.menuItem[isSameid].num++;
         }
-        if(isMenuSameid == -1){
-            return;
-        }else {
-            _this.menus[isMenuSameid].num++;
+        if (isMenuSameid == -1) {
+          for (var n = 0; n < _this.goods.length; n++) {
+            var menuItemId = _this.goods[n].foods.findIndex(x => x.id == arr.id);
+            if (menuItemId != -1) {
+              _this.goods[n].foods[menuItemId].num++;
+            }else {
+                continue;
+            }
+          }
+
+          return;
+        } else {
+          _this.menus[isMenuSameid].num++;
         }
 //        fooditem.num++;
         console.log(_this.menuItem, isSameid);
@@ -515,12 +524,26 @@
         var isSameID = _this.menus.findIndex(x => x.id == fooditem_reduce.id);
         var shopItemId = _this.menuItem.findIndex(x => x.id == fooditem_reduce.id);
         _this.menuItem[shopItemId].num = fooditem_reduce.num;
-        _this.menus[isSameID].num = fooditem_reduce.num;
+        if (isSameID != -1) {
+          _this.menus[isSameID].num = fooditem_reduce.num;
+        }
         // console.log(shopItemId, fooditem_reduce.num, 2);
         //        _this.menuItem[shopItemId].num--;
         if (_this.menuItem[shopItemId].num == 0) {
           _this.menuItem.splice(shopItemId, 1);
           // console.log(fooditem_reduce.num, 3);
+        }
+        for (var j = 0; j < _this.goods.length; j++) {
+          var menuItemId = _this.goods[j].foods.findIndex(x => x.id == fooditem_reduce.id);
+          if (menuItemId != -1) {
+            if (_this.goods[j].foods[menuItemId].num != 0) {
+              _this.goods[j].foods[menuItemId].num--;
+            } else {
+              continue;
+            }
+          } else {
+            continue;
+          }
         }
         // console.log(fooditem_reduce.num, 4);
         var price = parseFloat(fooditem_reduce.weixin);
@@ -613,6 +636,13 @@
           }
         }
         for (var j = 0; j < this.goods.length; j++) {
+          for (var m = 0; m < this.goods[j].foods.length; m++) {
+            if (this.goods[j].foods[m].num != 0) {
+              this.goods[j].foods[m].num = 0;
+            } else {
+              continue;
+            }
+          }
           this.goods[j].seletedNum = 0;
         }
         ;

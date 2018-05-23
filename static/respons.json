@@ -23,7 +23,7 @@
           ],
           "foodsize": [],
           "categoryname": "哒哒大大大大大大",
-          "id": 7636,
+          "id": 5000,
           "merchantId": 114,
           "shopId": 160,
           "pinyin": "LBX",
@@ -61,7 +61,7 @@
           "foodtasetEntity": null,
           "foodsize": [],
           "categoryname": "哒哒大大大大大大",
-          "id": 7637,
+          "id": 5001,
           "merchantId": 114,
           "shopId": 160,
           "pinyin": "LTSC",
@@ -99,7 +99,7 @@
           "foodtasetEntity": null,
           "foodsize": [],
           "categoryname": "哒哒大大大大大大",
-          "id": 7638,
+          "id": 5002,
           "merchantId": 114,
           "shopId": 160,
           "pinyin": "LC",
@@ -137,7 +137,7 @@
           "foodtasetEntity": null,
           "foodsize": [],
           "categoryname": "哒哒大大大大大大",
-          "id": 7639,
+          "id": 5003,
           "merchantId": 114,
           "shopId": 160,
           "pinyin": "LE",
@@ -666,50 +666,10 @@
     {
       "foods": [
         {
-          "foodtasetEntity": [
-            {
-              "id": 1019,
-              "shopid": 160,
-              "merchantFoodTasteId": null,
-              "price": 10.0,
-              "name": "蜂蜜",
-              "merchantFoodId": null
-            }
-          ],
-          "foodsize": [
-            {
-              "id": 1034,
-              "code": null,
-              "shopId": null,
-              "foodId": null,
-              "title": "大份",
-              "cost": 20.0,
-              "weixin": 20.0,
-              "merchantId": null,
-              "vipPrice": null,
-              "retailPrice": null,
-              "barcode": null,
-              "createTime": null,
-              "updateTime": null
-            },
-            {
-              "id": 1035,
-              "code": null,
-              "shopId": null,
-              "foodId": null,
-              "title": "小份",
-              "cost": 10.0,
-              "weixin": 10.0,
-              "merchantId": null,
-              "vipPrice": null,
-              "retailPrice": null,
-              "barcode": null,
-              "createTime": null,
-              "updateTime": null
-            }
-          ],
+          "foodtasetEntity": [],
+          "foodsize": [],
           "categoryname": "哒",
-          "id": 7636,
+          "id": 1,
           "merchantId": 114,
           "shopId": 160,
           "pinyin": "LBX",
