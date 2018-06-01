@@ -181,6 +181,7 @@
               if (res.data.foodlist.length == 0) {
                 alert("该店铺相关数据为空");
               } else {
+
                 _this.menus = res.data.foodlist[0].foods;
                 window.localStorage.removeItem("shopName");
                 window.localStorage.setItem("shopName", res.data.shopname);
@@ -208,6 +209,7 @@
                   }
                 }
                 ;
+//                alert(_this.goods);
                 console.log(_this.goods);
               }
             });
@@ -307,6 +309,7 @@
         //        for (var i = 0; i < _this.menus.length; i++) {
         //          _this.menus[i].num = 0;
         //        }
+//        alert("切换菜单" + index + ",");
         console.log(this.menus);
       }
       ,
@@ -441,6 +444,7 @@
         console.log(9, _this.menuItem);
         //        console.log(this.menuItem);
 
+//        alert("点击菜单加号");
         document
           .getElementById("food_norms")
           .setAttribute("class", "nodis_foodNormsDiv");
@@ -457,7 +461,7 @@
         arr.preweixin = fooditem.weixin;
         arr.foodsize = fooditem.foodsize;
         arr.foodtasetEntity = fooditem.foodtasetEntity;
-        arr.num = 0;
+        arr.num = fooditem.num;
         arr.name = fooditem.name;
         arr.avator = fooditem.avator;
         arr.categoryname = fooditem.categoryname;
@@ -466,18 +470,62 @@
         arr.hasTaste = false;
 
         //找一样菜单大类名字，然后数字加一
-        var cateNum = _this.goods.findIndex(x => x.foodCategory == fooditem.categoryname);
-        if (cateNum == -1) {
-          alert("菜单项对应的大类菜单名称为空");
-        } else {
-          _this.goods[cateNum].seletedNum++;
+//        alert(arr.num + "从goods里面findindex" + fooditem.categoryname+","+_this.goods.length);passed
+        for (var i = 0; i < _this.goods.length; i++) {
+//          alert(i + "for goods" + fooditem.categoryname);
+          if (fooditem.categoryname === _this.goods[i].foodCategory) {
+            _this.goods[i].seletedNum++;
+          } else {
+            continue;
+          }
         }
-        console.log(this.goods.seletedNum);
+//        var cateNum = _this.goods.findIndex(x => x.foodCategory == fooditem.categoryname);
+//        alert(arr.num + "从goods里面findindex" + fooditem.categoryname + "成功");
+//        if (cateNum == -1) {
+//          alert("菜单项对应的大类菜单名称为空");
+//        } else {
+//
+//        }
+//        console.log(this.goods.seletedNum);
         var price = parseFloat(arr.weixin);
         _this.totalPrice = parseFloat(_this.totalPrice);
         _this.totalPrice += price;
         _this.totalPrice = _this.totalPrice.toFixed(2);
         //找id一样的菜单
+        var inMenuItem = _this.menuItem;
+//        alert(_this.menuItem.length);
+        if (inMenuItem.length == 0) {//passed
+//            alert("menuItem.length为0");
+          arr.num++;
+//          fooditem.num = arr.num;
+          inMenuItem.push(arr);
+//          alert(_this.menuItem.length);
+        } else {
+//          var isSameid = _this.menuItem.findIndex(x => x.id == arr.id);
+
+//          alert("准备遍历mnuItem的length" + inMenuItem.length);
+          for (var m = 0; m <= inMenuItem.length; m++) {
+//              alert(m);
+              if (inMenuItem[m].id === arr.id) {
+//                alert(m + "," + inMenuItem[m].id + "," + arr.id);
+                inMenuItem[m].num++;
+//                fooditem.num = _this.menuItem[m].num;
+                break;
+              } else {
+//                  alert(m+","+inMenuItem.length);
+                if (m == inMenuItem.length-1) {
+                  arr.num++;
+//                  fooditem.num = arr.num;
+                  inMenuItem.push(arr);
+//                  alert(m+","+inMenuItem.length);
+                  break;
+                } else {
+//                alert("两个id不相等");
+                  continue;
+              }
+            }
+          }
+        }
         var isSameid = _this.menuItem.findIndex(x => x.id == arr.id);
         var isMenuSameid = _this.menus.findIndex(x => x.id == arr.id);
 
@@ -487,20 +535,19 @@
         //        } else {
         //          fooditem.nums++;
         //        };
-        if (isSameid == -1) {
-          arr.num++;
-          _this.menuItem.push(arr);
-//          fooditem.num++;
-        } else {
-          _this.menuItem[isSameid].num++;
-        }
+//        if (isSameid == -1) {
+//
+////          fooditem.num++;
+//        } else {
+//          _this.menuItem[isSameid].num++;
+//        }
         if (isMenuSameid == -1) {
           for (var n = 0; n < _this.goods.length; n++) {
             var menuItemId = _this.goods[n].foods.findIndex(x => x.id == arr.id);
             if (menuItemId != -1) {
               _this.goods[n].foods[menuItemId].num++;
-            }else {
-                continue;
+            } else {
+              continue;
             }
           }
 
@@ -551,6 +598,7 @@
         _this.totalPrice -= price;
         _this.totalPrice = _this.totalPrice.toFixed(2);
         _this.foodNums--;
+//        alert("点击菜单减号" + _this.totalPrice);
         // console.log(fooditem_reduce.num, 5);
         //        _this.menus[isSameID].num--;
       }
