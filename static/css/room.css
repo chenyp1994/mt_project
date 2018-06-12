@@ -582,17 +582,22 @@
 
 .shopcart_name_span {
   flex-grow: 1;
-  margin: 1em;
+  margin: 0.5em 1em;
 }
 
 .shopcart_money_span {
-  flex-grow: 3;
-  text-align: right;
+  width:30%;
+  float: right;
+  text-align: left;
   margin-top: 1.35em;
 }
-.shopcart_money_span _none {
-  flex-grow: 3;
-  text-align: right;
+
+
+.shopcart_money_span_none {
+  /*flex-grow: 3;*/
+  width:30%;
+  float: right;
+  text-align: left;
 }
 .shopcart_remark_span{
   flex-grow: 2;
@@ -607,7 +612,7 @@
   display: flex;
   /*flex-grow: 2;*/
   align-items: center;
-  margin: 1em;
+  margin: 0.5em 1em;
   color: #666666;
 }
 

@@ -90,9 +90,9 @@
                 <span class="shopcart_name_span">{{item.name}}</span>
                 <span class="shopcart_money_span_none" v-if="!item.hasTaste">&yen;{{item.weixin}}<br><span
                   style="font-size: .75em;">{{item.tasteRemark}}</span></span>
-                <span class="shopcart_money_span" v-else="">&yen;{{item.weixin}}<br><span
-                  style="font-size: .75em;">{{item.tasteRemark}}</span></span>
-                <span class="shopcart_remark_span">{{item.sizeRemark}}</span>
+                <span class="shopcart_money_span" v-else="">&yen;{{item.weixin}}<span class="shopcart_remark_span">{{item.sizeRemark}}</span><br><span
+                  style="font-size: .75em;width: 100%;display: block;text-align: center;">{{item.tasteRemark}}</span></span>
+
                 <span class="shopcart_count_span">
                 <span @click="onReduceFoodItem(item)"><img src="../../assets/minus.png"/></span>
                 {{item.num}}
@@ -412,7 +412,7 @@
           }
         }
 
-        console.log(2, arr.remark, _this.menuItem);
+//        console.log(2, arr.remark, _this.menuItem);
         _this.foodNums++;
         var price = parseFloat(arr.weixin);
         _this.totalPrice = parseFloat(_this.totalPrice);
@@ -455,7 +455,7 @@
         var _this = this;
         _this.foodNums++;
         var arr = new Object();
-        arr.remark = fooditem.title;
+        arr.remark = "";
         arr.id = fooditem.id;
         arr.weixin = fooditem.weixin;
         arr.preweixin = fooditem.weixin;
