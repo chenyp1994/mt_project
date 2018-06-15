@@ -568,12 +568,12 @@
           _this.goods[cateNum].seletedNum--;
         }
         fooditem_reduce.num--;
-        var isSameID = _this.menus.findIndex(x => x.id == fooditem_reduce.id);
+//        var isSameID = _this.menus.findIndex(x => x.id == fooditem_reduce.id);
         var shopItemId = _this.menuItem.findIndex(x => x.id == fooditem_reduce.id);
         _this.menuItem[shopItemId].num = fooditem_reduce.num;
-        if (isSameID != -1) {
-          _this.menus[isSameID].num = fooditem_reduce.num;
-        }
+//        if (isSameID != -1) {
+//          _this.menus[isSameID].num = fooditem_reduce.num;
+//        }
         // console.log(shopItemId, fooditem_reduce.num, 2);
         //        _this.menuItem[shopItemId].num--;
         if (_this.menuItem[shopItemId].num == 0) {
