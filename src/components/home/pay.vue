@@ -11,7 +11,7 @@
       <ul>
         <li v-for="item in menus">
           <div class="Img_div">
-            <img :src="'http://113.105.152.179:8080/foodimage/png/'+item.avator"/>
+            <img :src="'http://www.ycyun.vip/foodimage/png/'+item.avator"/>
           </div>
           <div class="menu_list_div">
             <p class="menu_name_p">{{item.name}}&nbsp;x{{item.num+item.sizeRemark}}<span class="cost_span">&yen;{{item.weixin}}</span></p>

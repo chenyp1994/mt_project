@@ -27,7 +27,7 @@
       </div>
       <div class="mainmenu_div">
         <div class="food_div" v-for="(item, index) in menus">
-          <div class="menuimg_div"><span><img :src="'http://113.105.152.179:8080/foodimage/png/'+item.avator"/></span>
+          <div class="menuimg_div"><span><img :src="'http://www.ycyun.vip/foodimage/png/'+item.avator"/></span>
           </div>
           <div class=food_item_div><span class="food_name_span">{{item.name}}</span>
             <p class="money_p">&yen;&nbsp;{{item.weixin}}
@@ -567,10 +567,10 @@
         } else {
           _this.goods[cateNum].seletedNum--;
         }
-        fooditem_reduce.num--;
+//        fooditem_reduce.num--;
 //        var isSameID = _this.menus.findIndex(x => x.id == fooditem_reduce.id);
         var shopItemId = _this.menuItem.findIndex(x => x.id == fooditem_reduce.id);
-        _this.menuItem[shopItemId].num = fooditem_reduce.num;
+        _this.menuItem[shopItemId].num--;
 //        if (isSameID != -1) {
 //          _this.menus[isSameID].num = fooditem_reduce.num;
 //        }
