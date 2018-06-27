@@ -314,6 +314,7 @@
       }
       ,
       onChooseNorms: function (food, event) {
+        this.food_info = null;
         var data = new Object();
         data.id = food.id;
         data.name = food.name;
@@ -356,7 +357,7 @@
       onAddFood: function (fooditem) {
         var _this = this;
         var arr = new Object();
-        arr.remark = "";
+        arr.remark = new Object();
         arr.id = fooditem.id;
         arr.weixin = _this.food_info.weixin;
         arr.preweixin = _this.food_info.weixin;
@@ -381,7 +382,7 @@
             for (var i = 0; i < sizeCheckbox.length; i++) {
               if (sizeCheckbox[i].checked) {
                 checkedSize++;
-                arr.remark = sizeCheckbox[i].value;
+//                arr.remark = sizeCheckbox[i].value;
                 arr.sizeRemark = "/" + sizeCheckbox[i].value;
 //                sizeCheckbox[i].checked = false;
               } else {
@@ -398,7 +399,7 @@
             for (var j = 0; j < tasteCheckbox.length; j++) {
               if (tasteCheckbox[j].checked) {
                 checkedtaste++;
-                arr.remark += "," + tasteCheckbox[j].value;
+                arr.remark[tasteCheckbox[j].value] = arr.preweixin;
                 arr.tasteRemark = tasteCheckbox[j].value;
                 tasteCheckbox[j].checked = false;
               } else {
@@ -428,12 +429,12 @@
         } else {
           if (arr.remark === _this.menuItem[isSameid].remark) {
             _this.menuItem[isSameid].num++;
-            console.log(7, _this.menuItem);
+//            console.log(7, _this.menuItem);
           } else {
             arr.num++;
             _this.menuItem.push(arr);
 //            _this.menuItem[isSameid].num++;
-            console.log(8, _this.menuItem);
+//            console.log(8, _this.menuItem);
           }
         }
         if (cateNum == -1) {
@@ -455,7 +456,9 @@
         var _this = this;
         _this.foodNums++;
         var arr = new Object();
-        arr.remark = "";
+        arr.remark = new Object();
+        arr.remark[fooditem.title] = fooditem.weixin;
+//          [{fooditem.title":"fooditem.weixin}];
         arr.id = fooditem.id;
         arr.weixin = fooditem.weixin;
         arr.preweixin = fooditem.weixin;
@@ -467,6 +470,7 @@
         arr.categoryname = fooditem.categoryname;
         arr.title = fooditem.title;
         arr.sizeRemark = "/" + fooditem.title;
+        arr.tasteRemark = fooditem.tasteRemark;
         arr.hasTaste = false;
 
         //找一样菜单大类名字，然后数字加一
@@ -493,23 +497,26 @@
         _this.totalPrice = _this.totalPrice.toFixed(2);
         //找id一样的菜单
         var inMenuItem = _this.menuItem;
-//        alert(_this.menuItem.length);
         if (inMenuItem.length == 0) {//passed
-//            alert("menuItem.length为0");
           arr.num++;
 //          fooditem.num = arr.num;
           inMenuItem.push(arr);
 //          alert(_this.menuItem.length);
         } else {
 //          var isSameid = _this.menuItem.findIndex(x => x.id == arr.id);
-
-//          alert("准备遍历mnuItem的length" + inMenuItem.length);
           for (var m = 0; m <= inMenuItem.length; m++) {
 //              alert(m);
               if (inMenuItem[m].id === arr.id) {
 //                alert(m + "," + inMenuItem[m].id + "," + arr.id);
-                inMenuItem[m].num++;
-//                fooditem.num = _this.menuItem[m].num;
+                if(inMenuItem[m].tasteRemark ===arr.tasteRemark){
+                    if(inMenuItem[m].sizeRemark ===arr.sizeRemark){
+                      inMenuItem[m].num++;
+                    }else {
+                        continue;
+                    }
+                }else{
+                    continue;
+                }
                 break;
               } else {
 //                  alert(m+","+inMenuItem.length);
@@ -561,6 +568,10 @@
       ,
       onReduceFoodItem: function (fooditem_reduce) {
         var _this = this;
+        var arr = new Object();
+        arr.tasteRemark = fooditem_reduce.tasteRemark;
+        arr.id = fooditem_reduce.id;
+        arr.sizeRemark = fooditem_reduce.sizeRemark;
         var cateNum = _this.goods.findIndex(x => x.foodCategory == fooditem_reduce.categoryname);
         if (cateNum == -1) {
           alert("返回数据的菜单名为空");
@@ -569,17 +580,47 @@
         }
 //        fooditem_reduce.num--;
 //        var isSameID = _this.menus.findIndex(x => x.id == fooditem_reduce.id);
-        var shopItemId = _this.menuItem.findIndex(x => x.id == fooditem_reduce.id);
-        _this.menuItem[shopItemId].num--;
+//        var shopItemId = _this.menuItem.findIndex(x => x.id == fooditem_reduce.id);
+        var inMenuItem = _this.menuItem;
+        for (var m = 0; m < inMenuItem.length; m++) {
+//              alert(m);
+          if (inMenuItem[m].id === arr.id) {
+//                alert(m + "," + inMenuItem[m].id + "," + arr.id);
+            if(inMenuItem[m].tasteRemark ===arr.tasteRemark){
+                if(inMenuItem[m].sizeRemark ===arr.sizeRemark){
+                  inMenuItem[m].num--;
+                }else {
+                    continue;
+                }
+            }else{
+              continue;
+            }
+            break;
+          } else {
+              continue;
+//                  alert(m+","+inMenuItem.length);
+//            if (m == inMenuItem.length-1) {
+//              arr.num++;
+////                  fooditem.num = arr.num;
+//              inMenuItem.push(arr);
+////                  alert(m+","+inMenuItem.length);
+//              break;
+//            } else {
+////                alert("两个id不相等");
+//              continue;
+//            }
+          }
+        }
+//        _this.menuItem[shopItemId].num--;
 //        if (isSameID != -1) {
 //          _this.menus[isSameID].num = fooditem_reduce.num;
 //        }
         // console.log(shopItemId, fooditem_reduce.num, 2);
         //        _this.menuItem[shopItemId].num--;
-        if (_this.menuItem[shopItemId].num == 0) {
-          _this.menuItem.splice(shopItemId, 1);
-          // console.log(fooditem_reduce.num, 3);
-        }
+//        if (_this.menuItem[shopItemId].num == 0) {
+//          _this.menuItem.splice(shopItemId, 1);
+//          // console.log(fooditem_reduce.num, 3);
+//        }
         for (var j = 0; j < _this.goods.length; j++) {
           var menuItemId = _this.goods[j].foods.findIndex(x => x.id == fooditem_reduce.id);
           if (menuItemId != -1) {
@@ -644,7 +685,7 @@
           for (var i = 0; i < sizeCheckbox.length; i++) {
             if (sizeCheckbox[i].checked) {
               if (sizeCheckbox[i].value == foodinfo.title) {
-                price = parseFloat(foodinfo.weixin);
+                price = parseFloat(foodinfo.preweixin);
               } else {
                 var num = foodinfo.foodsize.findIndex(x => x.title == sizeCheckbox[i].value);
                 price = parseFloat(foodinfo.foodsize[num].weixin);
